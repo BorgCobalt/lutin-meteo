@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a2e1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Conseils vestimentaires enchantes pour le Lutin - bases sur la meteo">
+  <link rel="manifest" href="manifest.json">
+  <title>Le Lutin M&eacute;t&eacute;o</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bark: #2d1b0e;
+  --bark-light: #5c3d2e;
+  --golden: #c9a84c;
+  --forest: #4a7c59;
+  --forest-light: #7c9a6e;
+  --sage: #a8c09a;
+  --cream: #f5e6d3;
+  --warm-white: #fff8f0;
+  --mushroom: #d4a574;
+  --mushroom-light: #e8c9a0;
+  --berry: #8b3a5e;
+  --moss: #3d5a3a;
+  --shadow: rgba(45, 27, 14, 0.15);
+  --shadow-strong: rgba(45, 27, 14, 0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: var(--cream);
+  color: var(--bark);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.forest-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: linear-gradient(180deg, #1a2e1a 0%, #2a4a2a 30%, #3d5a3a 60%, #4a6b45 100%);
+}
+
+.forest-bg::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40%;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255,248,240,0.08) 0%, transparent 70%);
+}
+
+/* Fireflies */
+.firefly {
+  position: fixed;
+  width: 4px; height: 4px;
+  background: var(--golden);
+  border-radius: 50%;
+  box-shadow: 0 0 8px 3px rgba(201,168,76,0.4), 0 0 16px 6px rgba(201,168,76,0.2);
+  animation: ff-float 6s ease-in-out infinite, ff-glow 3s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes ff-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(15px, -20px) scale(1.2); }
+  50% { transform: translate(-10px, -35px) scale(0.8); }
+  75% { transform: translate(20px, -15px) scale(1.1); }
+}
+
+@keyframes ff-glow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* Mushroom decorations */
+.mushroom-deco {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.mushroom-svg { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+
+/* Container */
+.app-container {
+  position: relative;
+  z-index: 2;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 20px 16px 100px;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 30px 0 20px;
+}
+
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--warm-white);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  letter-spacing: 0.02em;
+}
+
+.header .subtitle {
+  font-size: 0.9rem;
+  color: var(--sage);
+  margin-top: 4px;
+  font-style: italic;
+  font-family: 'Playfair Display', serif;
+}
+
+.header-mushrooms {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 1.4rem;
+}
+
+/* Cards */
+.card {
+  background: rgba(255, 248, 240, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 20px var(--shadow), 0 1px 3px var(--shadow);
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  position: relative;
+  overflow: hidden;
+  animation: cardIn 0.5s ease-out both;
+}
+
+.card:nth-child(2) { animation-delay: 0.1s; }
+.card:nth-child(3) { animation-delay: 0.2s; }
+.card:nth-child(4) { animation-delay: 0.3s; }
+.card:nth-child(5) { animation-delay: 0.4s; }
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--forest), var(--golden), var(--mushroom));
+  border-radius: 20px 20px 0 0;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  color: var(--bark);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title .icon { font-size: 1.3rem; }
+
+/* Weather */
+.weather-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.weather-icon {
+  font-size: 3.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.weather-info { flex: 1; }
+
+.weather-temp {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--bark);
+  line-height: 1;
+}
+
+.weather-temp .unit {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--bark-light);
+}
+
+.weather-desc {
+  font-size: 0.95rem;
+  color: var(--bark-light);
+  text-transform: capitalize;
+  margin-top: 2px;
+}
+
+.weather-feeling {
+  display: inline-block;
+  background: var(--forest);
+  color: var(--warm-white);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.weather-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(212,165,116,0.2);
+}
+
+.weather-detail { text-align: center; }
+.weather-detail .detail-icon { font-size: 1.2rem; display: block; margin-bottom: 2px; }
+.weather-detail .detail-value { font-weight: 700; font-size: 0.95rem; color: var(--bark); }
+.weather-detail .detail-label { font-size: 0.7rem; color: var(--bark-light); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Lutin feeling */
+.lutin-feeling {
+  background: linear-gradient(135deg, rgba(74,124,89,0.1), rgba(201,168,76,0.1));
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(74,124,89,0.15);
+}
+
+.lutin-feeling .feeling-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--bark);
+  text-align: center;
+}
+
+.lutin-feeling .feeling-emoji {
+  font-size: 1.8rem;
+  display: block;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+/* Outfit */
+.outfit-section { margin-top: 8px; }
+
+.outfit-occasion {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--forest);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.outfit-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.outfit-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,248,240,0.6);
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(212,165,116,0.15);
+  transition: transform 0.2s ease;
+}
+
+.outfit-item:active { transform: scale(0.98); }
+
+.outfit-item .item-icon {
+  font-size: 1.8rem;
+  width: 44px; height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(74,124,89,0.1);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.outfit-item .item-info { flex: 1; }
+.outfit-item .item-name { font-weight: 700; font-size: 0.95rem; color: var(--bark); }
+.outfit-item .item-detail { font-size: 0.8rem; color: var(--bark-light); margin-top: 1px; }
+
+.outfit-item .item-layer {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--forest);
+  font-weight: 600;
+  background: rgba(74,124,89,0.1);
+  padding: 2px 8px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* Accessories */
+.accessories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.accessory-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(201,168,76,0.15);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--bark);
+}
+
+/* Tomorrow */
+.tomorrow-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.tomorrow-weather { display: flex; align-items: center; gap: 10px; }
+.tomorrow-icon { font-size: 2.2rem; }
+.tomorrow-temps { font-family: 'Playfair Display', serif; }
+.tomorrow-temps .temp-max { font-size: 1.6rem; font-weight: 700; color: var(--bark); }
+.tomorrow-temps .temp-min { font-size: 1rem; color: var(--bark-light); }
+
+/* Hourly */
+.hourly-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 8px;
+  margin: 12px -8px;
+  scrollbar-width: none;
+}
+
+.hourly-scroll::-webkit-scrollbar { display: none; }
+
+.hourly-item {
+  text-align: center;
+  flex-shrink: 0;
+  min-width: 56px;
+  padding: 8px 6px;
+  background: rgba(255,248,240,0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(212,165,116,0.1);
+}
+
+.hourly-item .hour { font-size: 0.7rem; color: var(--bark-light); font-weight: 600; }
+.hourly-item .h-icon { font-size: 1.3rem; margin: 4px 0; display: block; }
+.hourly-item .h-temp { font-size: 0.85rem; font-weight: 700; color: var(--bark); }
+
+/* Notification */
+.notif-card { display: flex; align-items: center; gap: 14px; }
+.notif-card .notif-text { flex: 1; }
+.notif-card .notif-text h3 { font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 2px; }
+.notif-card .notif-text p { font-size: 0.8rem; color: var(--bark-light); }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--forest);
+  color: var(--warm-white);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(74,124,89,0.3);
+  flex-shrink: 0;
+}
+
+.btn:active { transform: scale(0.95); box-shadow: 0 1px 4px rgba(74,124,89,0.3); }
+.btn-small { padding: 7px 14px; font-size: 0.8rem; border-radius: 10px; }
+.btn-golden { background: var(--golden); color: var(--bark); box-shadow: 0 2px 8px rgba(201,168,76,0.3); }
+
+.time-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.time-picker-row input[type="time"] {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  padding: 8px 12px;
+  border: 2px solid var(--sage);
+  border-radius: 10px;
+  background: var(--warm-white);
+  color: var(--bark);
+  outline: none;
+}
+
+.time-picker-row input[type="time"]:focus { border-color: var(--forest); }
+
+/* Loading */
+.loading-screen {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, #1a2e1a, #2a4a2a);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.loading-mushroom { font-size: 3rem; animation: bounce 1.5s ease-in-out infinite; }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.loading-text {
+  font-family: 'Playfair Display', serif;
+  color: var(--sage);
+  font-size: 1.1rem;
+  margin-top: 16px;
+  font-style: italic;
+}
+
+/* Error */
+.error-msg { text-align: center; padding: 30px 20px; color: var(--warm-white); }
+.error-msg .error-icon { font-size: 3rem; margin-bottom: 12px; }
+.error-msg h2 { font-family: 'Playfair Display', serif; margin-bottom: 8px; }
+.error-msg p { color: var(--sage); font-size: 0.9rem; margin-bottom: 16px; }
+
+/* Refresh */
+.refresh-bar { text-align: center; margin-bottom: 12px; }
+.refresh-bar .last-update { font-size: 0.75rem; color: rgba(255,248,240,0.5); margin-bottom: 6px; }
+
+/* Rain/snow alerts */
+.weather-alert {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+
+.alert-rain { background: rgba(90,130,180,0.1); }
+.alert-snow { background: rgba(180,200,220,0.15); }
+
+/* Bottom fade */
+.app-container::after {
+  content: '';
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(transparent, rgba(61,90,58,0.8));
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Dark edges */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  top: 0; bottom: 0;
+  width: 60px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+body::before { left: 0; background: linear-gradient(90deg, rgba(26,46,26,0.3), transparent); }
+body::after { right: 0; background: linear-gradient(-90deg, rgba(26,46,26,0.3), transparent); }
+
+/* City search fallback */
+.city-search {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--warm-white);
+}
+
+.city-search h2 {
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 8px;
+}
+
+.city-search p {
+  color: var(--sage);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.city-search-row {
+  display: flex;
+  gap: 8px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.city-search-row input {
+  flex: 1;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  padding: 10px 14px;
+  border: 2px solid var(--sage);
+  border-radius: 12px;
+  background: rgba(255,248,240,0.9);
+  color: var(--bark);
+  outline: none;
+}
+
+.city-search-row input:focus { border-color: var(--golden); }
+
+.city-results {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.city-result-btn {
+  background: rgba(255,248,240,0.15);
+  border: 1px solid rgba(255,248,240,0.2);
+  color: var(--warm-white);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.city-result-btn:active { background: rgba(255,248,240,0.25); }
+
+/* Responsive */
+@media (max-width: 360px) {
+  .app-container { padding: 12px 10px 80px; }
+  .header h1 { font-size: 1.7rem; }
+  .weather-temp { font-size: 2.4rem; }
+  .card { padding: 18px; }
+}
+  </style>
+</head>
+<body>
+  <div class="forest-bg"></div>
+
+  <div class="loading-screen" id="loading">
+    <div class="loading-mushroom">&#127812;</div>
+    <div class="loading-text">Le Lutin consulte la for&ecirc;t...</div>
+  </div>
+
+  <div class="app-container">
+    <div class="header">
+      <h1>Le Lutin M&eacute;t&eacute;o</h1>
+      <div class="subtitle">Conseils vestimentaires enchant&eacute;s</div>
+      <div class="header-mushrooms">&#127812;&#127807;&#127810;&#127807;&#127812;</div>
+    </div>
+    <div id="app"></div>
+  </div>
+
+<script>
+/* ============================================
+   LE LUTIN METEO
+   ============================================ */
+
+const OPEN_METEO_URL = 'https://api.open-meteo.com/v1/forecast';
+const NOTIF_HOUR_KEY = 'lutin_notif_hour';
+const NOTIF_MIN_KEY = 'lutin_notif_min';
+const LOCATION_KEY = 'lutin_location';
+
+// --- LUTIN TEMPERATURE PERCEPTION ---
+const LUTIN_FEELINGS = [
+  { max: 5,  label: 'Glacial Absolu', emoji: '\u{1F976}', quote: 'Le Lutin grelotte... Il faut TOUT sortir du placard\u00a0!', color: '#5b7fa5' },
+  { max: 10, label: 'Glacial',        emoji: '\u2744\uFE0F', quote: 'Le Lutin a besoin de son armure de chaleur\u00a0!', color: '#6a8fb5' },
+  { max: 15, label: 'Froid',          emoji: '\u{1F342}', quote: 'Le Lutin frissonne... des couches, des couches\u00a0!', color: '#8b7355' },
+  { max: 20, label: 'Frais',          emoji: '\u{1F33F}', quote: 'Le Lutin veut rester au chaud, mais avec style.', color: '#5a8a5a' },
+  { max: 25, label: 'Presque Parfait',emoji: '\u{1F338}', quote: 'Le Lutin commence \u00e0 sourire... presque le bonheur.', color: '#c07a8a' },
+  { max: 30, label: 'Perfection',     emoji: '\u2600\uFE0F', quote: 'Le Lutin est au paradis\u00a0! Temp\u00e9rature id\u00e9ale.', color: '#c9a84c' },
+  { max: 99, label: 'Fournaise',      emoji: '\u{1F525}', quote: 'M\u00eame le Lutin frileux trouve qu\'il fait chaud\u00a0!', color: '#c25a3a' }
+];
+
+// --- WARDROBE ---
+const OUTFITS = {
+  glacial_absolu: {
+    layers: [
+      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut, toujours', layer: 'Base' },
+      { icon: '\u{1F9F6}', name: 'Pull-over bien doux', detail: 'Le plus chaud et moelleux', layer: 'Milieu' },
+      { icon: '\u{1F9E5}', name: 'Manteau chaud', detail: 'Le gros manteau d\'hiver', layer: 'Dessus' },
+      { icon: '\u{1F456}', name: 'Pantalon en coton \u00e9pais', detail: 'Ou jean moulant avec collants', layer: 'Bas' },
+      { icon: '\u{1F462}', name: 'Bottes chaudes', detail: 'Bien ferm\u00e9es, bien isol\u00e9es', layer: 'Pieds' }
+    ],
+    accessories: [
+      { icon: '\u{1F9E3}', name: '\u00c9charpe' },
+      { icon: '\u{1F9E4}', name: 'Gants' },
+      { icon: '\u{1F3A9}', name: 'Bonnet' }
+    ]
+  },
+  glacial: {
+    layers: [
+      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
+      { icon: '\u{1F9F6}', name: 'Pull-over doux', detail: 'Chaud et \u00e9l\u00e9gant', layer: 'Milieu' },
+      { icon: '\u{1F9E5}', name: 'Manteau', detail: 'Manteau bien chaud', layer: 'Dessus' },
+      { icon: '\u{1F456}', name: 'Jean moulant', detail: 'Ou pantalon en coton chaud', layer: 'Bas' },
+      { icon: '\u{1F462}', name: 'Chaussures ferm\u00e9es', detail: 'Chaudes et \u00e9l\u00e9gantes', layer: 'Pieds' }
+    ],
+    accessories: [
+      { icon: '\u{1F9E3}', name: '\u00c9charpe' },
+      { icon: '\u{1F9E4}', name: 'Gants' }
+    ]
+  },
+  froid: {
+    layers: [
+      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
+      { icon: '\u{1F9F6}', name: 'Pull-over doux', detail: 'Moelleux et chic', layer: 'Milieu' },
+      { icon: '\u{1F9E5}', name: 'Veste chaude', detail: 'Veste \u00e9l\u00e9gante ou manteau l\u00e9ger', layer: 'Dessus' },
+      { icon: '\u{1F456}', name: 'Pantalon en coton', detail: 'Ou jean moulant', layer: 'Bas' },
+      { icon: '\u{1F45F}', name: 'Chaussures ferm\u00e9es', detail: 'Confortables et chaudes', layer: 'Pieds' }
+    ],
+    accessories: [
+      { icon: '\u{1F9E3}', name: '\u00c9charpe l\u00e9g\u00e8re' }
+    ]
+  },
+  frais: {
+    layers: [
+      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
+      { icon: '\u{1F454}', name: 'Chemise ou pull l\u00e9ger', detail: 'Chemise \u00e9l\u00e9gante ou pull fin', layer: 'Milieu' },
+      { icon: '\u{1F9E5}', name: 'Veste', detail: 'Veste l\u00e9g\u00e8re pour les couches', layer: 'Dessus' },
+      { icon: '\u{1F456}', name: 'Jean moulant ou jupe', detail: 'Avec collants si jupe', layer: 'Bas' },
+      { icon: '\u{1F45F}', name: 'Chaussures de saison', detail: '\u00c9l\u00e9gantes et confortables', layer: 'Pieds' }
+    ],
+    accessories: []
+  },
+  presque_parfait: {
+    layers: [
+      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
+      { icon: '\u{1F454}', name: 'Chemise l\u00e9g\u00e8re', detail: 'Ou pull-over fin et doux', layer: 'Haut' },
+      { icon: '\u{1F456}', name: 'Jean moulant ou jupe', detail: 'Pantalon coton ou jupe \u00e9l\u00e9gante', layer: 'Bas' },
+      { icon: '\u{1F45F}', name: 'Chaussures l\u00e9g\u00e8res', detail: 'Ou sandales si beau temps', layer: 'Pieds' }
+    ],
+    accessories: [
+      { icon: '\u{1F9E5}', name: 'Petite veste (au cas o\u00f9)' }
+    ]
+  },
+  perfection: {
+    layers: [
+      { icon: '\u{1F455}', name: 'Top l\u00e9ger', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
+      { icon: '\u{1F457}', name: 'Robe ou chemise l\u00e9g\u00e8re', detail: 'Robe \u00e9l\u00e9gante ou shorty + haut', layer: 'Haut' },
+      { icon: '\u{1FA73}', name: 'Shorty ou jupe', detail: 'Si pas de robe, shorty chic', layer: 'Bas' },
+      { icon: '\u{1FA74}', name: 'Sandales', detail: 'Pieds libres, bonheur\u00a0!', layer: 'Pieds' }
+    ],
+    accessories: []
+  },
+  fournaise: {
+    layers: [
+      { icon: '\u{1F455}', name: 'Top le plus l\u00e9ger', detail: 'Le minimum, avec gr\u00e2ce', layer: 'Base' },
+      { icon: '\u{1F457}', name: 'Robe l\u00e9g\u00e8re', detail: 'Ou shorty + top a\u00e9r\u00e9', layer: 'Haut' },
+      { icon: '\u{1FA74}', name: 'Sandales', detail: 'A\u00e9ration maximale', layer: 'Pieds' }
+    ],
+    accessories: [
+      { icon: '\u{1F576}\uFE0F', name: 'Lunettes de soleil' },
+      { icon: '\u{1F4A7}', name: 'Bouteille d\'eau\u00a0!' }
+    ]
+  }
+};
+
+const RAIN_ITEMS = [
+  { icon: '\u{1F302}', name: 'Parapluie' },
+  { icon: '\u{1F9E5}', name: 'Imperm\u00e9able' }
+];
+const WIND_ITEMS = [
+  { icon: '\u{1F4A8}', name: 'Coupe-vent' }
+];
+
+// --- WEATHER CODES ---
+function weatherCodeToInfo(code) {
+  const map = {
+    0:  { icon: '\u2600\uFE0F', desc: 'Ciel d\u00e9gag\u00e9' },
+    1:  { icon: '\u{1F324}\uFE0F', desc: 'Peu nuageux' },
+    2:  { icon: '\u26C5', desc: 'Partiellement nuageux' },
+    3:  { icon: '\u2601\uFE0F', desc: 'Couvert' },
+    45: { icon: '\u{1F32B}\uFE0F', desc: 'Brouillard' },
+    48: { icon: '\u{1F32B}\uFE0F', desc: 'Brouillard givrant' },
+    51: { icon: '\u{1F326}\uFE0F', desc: 'Bruine l\u00e9g\u00e8re' },
+    53: { icon: '\u{1F326}\uFE0F', desc: 'Bruine' },
+    55: { icon: '\u{1F327}\uFE0F', desc: 'Bruine dense' },
+    61: { icon: '\u{1F327}\uFE0F', desc: 'Pluie l\u00e9g\u00e8re' },
+    63: { icon: '\u{1F327}\uFE0F', desc: 'Pluie' },
+    65: { icon: '\u{1F327}\uFE0F', desc: 'Forte pluie' },
+    66: { icon: '\u{1F327}\uFE0F', desc: 'Pluie vergla\u00e7ante' },
+    67: { icon: '\u{1F327}\uFE0F', desc: 'Pluie vergla\u00e7ante forte' },
+    71: { icon: '\u{1F328}\uFE0F', desc: 'Neige l\u00e9g\u00e8re' },
+    73: { icon: '\u{1F328}\uFE0F', desc: 'Neige' },
+    75: { icon: '\u2744\uFE0F', desc: 'Forte neige' },
+    77: { icon: '\u{1F328}\uFE0F', desc: 'Grains de neige' },
+    80: { icon: '\u{1F326}\uFE0F', desc: 'Averses l\u00e9g\u00e8res' },
+    81: { icon: '\u{1F327}\uFE0F', desc: 'Averses' },
+    82: { icon: '\u26C8\uFE0F', desc: 'Averses violentes' },
+    85: { icon: '\u{1F328}\uFE0F', desc: 'Averses de neige' },
+    86: { icon: '\u{1F328}\uFE0F', desc: 'Fortes averses de neige' },
+    95: { icon: '\u26C8\uFE0F', desc: 'Orage' },
+    96: { icon: '\u26C8\uFE0F', desc: 'Orage avec gr\u00eale' },
+    99: { icon: '\u26C8\uFE0F', desc: 'Orage violent avec gr\u00eale' }
+  };
+  return map[code] || { icon: '\u{1F324}\uFE0F', desc: 'Variable' };
+}
+
+function isRainy(code) { return [51,53,55,61,63,65,66,67,80,81,82,95,96,99].includes(code); }
+function isSnowy(code) { return [71,73,75,77,85,86].includes(code); }
+
+// --- ENGINE ---
+function getLutinFeeling(temp) {
+  for (const f of LUTIN_FEELINGS) { if (temp < f.max) return f; }
+  return LUTIN_FEELINGS[LUTIN_FEELINGS.length - 1];
+}
+
+function getOutfitKey(temp) {
+  if (temp < 5)  return 'glacial_absolu';
+  if (temp < 10) return 'glacial';
+  if (temp < 15) return 'froid';
+  if (temp < 20) return 'frais';
+  if (temp < 25) return 'presque_parfait';
+  if (temp < 30) return 'perfection';
+  return 'fournaise';
+}
+
+function buildRecommendation(temp, weatherCode, windSpeed) {
+  const key = getOutfitKey(temp);
+  const outfit = OUTFITS[key];
+  const feeling = getLutinFeeling(temp);
+  const rain = isRainy(weatherCode);
+  const snow = isSnowy(weatherCode);
+  const windy = windSpeed > 30;
+  const accessories = [...outfit.accessories];
+  if (rain) accessories.push(...RAIN_ITEMS);
+  if (windy) accessories.push(...WIND_ITEMS);
+  if (snow) accessories.push({ icon: '\u{1F97E}', name: 'Bottes imperm\u00e9ables' });
+  return { feeling, layers: outfit.layers, accessories, rain, snow, windy };
+}
+
+// --- GEOLOCATION ---
+function getLocationGPS() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) { reject(new Error('no-gps')); return; }
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const loc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+        localStorage.setItem(LOCATION_KEY, JSON.stringify(loc));
+        resolve(loc);
+      },
+      () => reject(new Error('no-gps')),
+      { enableHighAccuracy: false, timeout: 10000 }
+    );
+  });
+}
+
+// Strasbourg par defaut pour le Lutin
+const DEFAULT_LOCATION = { lat: 48.5734, lon: 7.7521 };
+
+async function getLocation() {
+  const saved = localStorage.getItem(LOCATION_KEY);
+  if (saved) return JSON.parse(saved);
+  try {
+    return await getLocationGPS();
+  } catch {
+    return showCitySearch();
+  }
+}
+
+function showCitySearch() {
+  return new Promise((resolve) => {
+    const loading = document.getElementById('loading');
+    loading.classList.add('hidden');
+    const app = document.getElementById('app');
+    app.innerHTML = `
+      <div class="city-search">
+        <h2>\u{1F344} Bienvenue, petit Lutin\u00a0!</h2>
+        <p>Le GPS n'est pas disponible. Dis-moi o\u00f9 tu te trouves\u00a0:</p>
+        <div class="city-search-row">
+          <input type="text" id="city-input" placeholder="Ta ville..." autofocus>
+          <button class="btn" onclick="searchCity()">Chercher</button>
+        </div>
+        <div id="city-results" class="city-results"></div>
+      </div>`;
+
+    document.getElementById('city-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') searchCity();
+    });
+
+    window._resolveLoc = resolve;
+  });
+}
+
+async function searchCity() {
+  const input = document.getElementById('city-input');
+  const q = input.value.trim();
+  if (!q) return;
+  const resultsDiv = document.getElementById('city-results');
+  resultsDiv.innerHTML = '<p style="color:var(--sage);font-size:0.85rem;">Recherche...</p>';
+  try {
+    const res = await fetch('https://geocoding-api.open-meteo.com/v1/search?name=' + encodeURIComponent(q) + '&count=5&language=fr');
+    const data = await res.json();
+    if (!data.results || data.results.length === 0) {
+      resultsDiv.innerHTML = '<p style="color:var(--sage);font-size:0.85rem;">Aucun r\u00e9sultat. Essaie un autre nom.</p>';
+      return;
+    }
+    resultsDiv.innerHTML = '';
+    for (const r of data.results) {
+      const btn = document.createElement('button');
+      btn.className = 'city-result-btn';
+      btn.textContent = r.name + (r.admin1 ? ', ' + r.admin1 : '') + (r.country ? ' \u2014 ' + r.country : '');
+      btn.onclick = () => selectCity(r.latitude, r.longitude);
+      resultsDiv.appendChild(btn);
+    }
+  } catch {
+    resultsDiv.innerHTML = '<p style="color:var(--sage);font-size:0.85rem;">Erreur r\u00e9seau. R\u00e9essaie.</p>';
+  }
+}
+
+function selectCity(lat, lon) {
+  const loc = { lat, lon };
+  localStorage.setItem(LOCATION_KEY, JSON.stringify(loc));
+  if (window._resolveLoc) {
+    window._resolveLoc(loc);
+    window._resolveLoc = null;
+  } else {
+    location.reload();
+  }
+}
+
+// --- API ---
+async function fetchWeather(lat, lon) {
+  const params = new URLSearchParams({
+    latitude: lat, longitude: lon,
+    current: 'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m',
+    hourly: 'temperature_2m,weather_code,wind_speed_10m',
+    daily: 'temperature_2m_max,temperature_2m_min,weather_code,wind_speed_10m_max',
+    timezone: 'auto', forecast_days: 2
+  });
+  const res = await fetch(OPEN_METEO_URL + '?' + params);
+  if (!res.ok) throw new Error('Erreur API m\u00e9t\u00e9o');
+  return res.json();
+}
+
+async function reverseGeocode(lat, lon) {
+  try {
+    const res = await fetch('https://nominatim.openstreetmap.org/reverse?lat=' + lat + '&lon=' + lon + '&format=json&accept-language=fr');
+    const data = await res.json();
+    return data.address?.city || data.address?.town || data.address?.village || 'For\u00eat enchant\u00e9e';
+  } catch { return 'For\u00eat enchant\u00e9e'; }
+}
+
+// --- RENDERING ---
+function renderWeather(data, cityName) {
+  const c = data.current;
+  const temp = Math.round(c.temperature_2m);
+  const apparent = Math.round(c.apparent_temperature);
+  const humidity = c.relative_humidity_2m;
+  const wind = Math.round(c.wind_speed_10m);
+  const wInfo = weatherCodeToInfo(c.weather_code);
+  const feeling = getLutinFeeling(temp);
+  return `
+    <div class="card">
+      <div class="card-title"><span class="icon">\u{1F30D}</span> ${cityName} &mdash; Maintenant</div>
+      <div class="weather-main">
+        <div class="weather-icon">${wInfo.icon}</div>
+        <div class="weather-info">
+          <div class="weather-temp">${temp}<span class="unit">\u00b0C</span></div>
+          <div class="weather-desc">${wInfo.desc}</div>
+          <div class="weather-feeling" style="background:${feeling.color}">${feeling.emoji} ${feeling.label}</div>
+        </div>
+      </div>
+      <div class="weather-details">
+        <div class="weather-detail">
+          <span class="detail-icon">\u{1F321}\uFE0F</span>
+          <div class="detail-value">${apparent}\u00b0</div>
+          <div class="detail-label">Ressenti</div>
+        </div>
+        <div class="weather-detail">
+          <span class="detail-icon">\u{1F4A7}</span>
+          <div class="detail-value">${humidity}%</div>
+          <div class="detail-label">Humidit\u00e9</div>
+        </div>
+        <div class="weather-detail">
+          <span class="detail-icon">\u{1F4A8}</span>
+          <div class="detail-value">${wind} km/h</div>
+          <div class="detail-label">Vent</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderFeeling(temp) {
+  const f = getLutinFeeling(temp);
+  return `<div class="lutin-feeling"><span class="feeling-emoji">${f.emoji}</span><div class="feeling-text">&laquo;&nbsp;${f.quote}&nbsp;&raquo;</div></div>`;
+}
+
+function renderOutfit(rec, label) {
+  let h = `<div class="card"><div class="card-title"><span class="icon">\u{1F454}</span> Tenue ${label}</div><div class="outfit-section"><div class="outfit-occasion">SUGGESTION DU LUTIN</div><div class="outfit-items">`;
+  for (const item of rec.layers) {
+    h += `<div class="outfit-item"><div class="item-icon">${item.icon}</div><div class="item-info"><div class="item-name">${item.name}</div><div class="item-detail">${item.detail}</div></div><div class="item-layer">${item.layer}</div></div>`;
+  }
+  h += '</div>';
+  if (rec.accessories.length > 0) {
+    h += '<div class="accessories">';
+    for (const a of rec.accessories) h += `<div class="accessory-tag">${a.icon} ${a.name}</div>`;
+    h += '</div>';
+  }
+  if (rec.rain) h += '<div class="weather-alert alert-rain">\u{1F327}\uFE0F <strong>Pluie pr\u00e9vue\u00a0!</strong> Le Lutin doit penser au parapluie.</div>';
+  if (rec.snow) h += '<div class="weather-alert alert-snow">\u{1F328}\uFE0F <strong>Neige\u00a0!</strong> Bottes imperm\u00e9ables et prudence.</div>';
+  h += '</div></div>';
+  return h;
+}
+
+function renderHourly(data) {
+  const now = new Date();
+  let h = '<div class="hourly-scroll">';
+  let count = 0;
+  for (let i = 0; i < data.hourly.time.length && count < 12; i++) {
+    const dt = new Date(data.hourly.time[i]);
+    if (dt <= now) continue;
+    const hr = dt.getHours().toString().padStart(2,'0') + 'h';
+    const temp = Math.round(data.hourly.temperature_2m[i]);
+    const wI = weatherCodeToInfo(data.hourly.weather_code[i]);
+    h += `<div class="hourly-item"><div class="hour">${hr}</div><span class="h-icon">${wI.icon}</span><div class="h-temp">${temp}\u00b0</div></div>`;
+    count++;
+  }
+  return h + '</div>';
+}
+
+function renderTomorrow(data) {
+  const d = data.daily;
+  const max = Math.round(d.temperature_2m_max[1]);
+  const min = Math.round(d.temperature_2m_min[1]);
+  const code = d.weather_code[1];
+  const wind = Math.round(d.wind_speed_10m_max[1]);
+  const wI = weatherCodeToInfo(code);
+  const avg = Math.round((max + min) / 2);
+  const rec = buildRecommendation(avg, code, wind);
+  const f = getLutinFeeling(avg);
+  let h = `
+    <div class="card">
+      <div class="card-title"><span class="icon">\u{1F52E}</span> Demain</div>
+      <div class="tomorrow-header">
+        <div class="tomorrow-weather">
+          <div class="tomorrow-icon">${wI.icon}</div>
+          <div class="tomorrow-temps"><div class="temp-max">${max}\u00b0</div><div class="temp-min">${min}\u00b0 min</div></div>
+        </div>
+        <div class="weather-feeling" style="background:${f.color}">${f.emoji} ${f.label}</div>
+      </div>
+      <div class="lutin-feeling" style="margin-bottom:0"><span class="feeling-emoji">${f.emoji}</span><div class="feeling-text">&laquo;&nbsp;${f.quote}&nbsp;&raquo;</div></div>
+    </div>`;
+  h += renderOutfit(rec, 'pour Demain');
+  return h;
+}
+
+function renderNotif() {
+  const hour = localStorage.getItem(NOTIF_HOUR_KEY) || '20';
+  const min = localStorage.getItem(NOTIF_MIN_KEY) || '00';
+  const tv = hour.padStart(2,'0') + ':' + min.padStart(2,'0');
+  return `
+    <div class="card">
+      <div class="card-title"><span class="icon">\u{1F514}</span> Rappel du soir</div>
+      <div class="notif-card">
+        <div class="notif-text">
+          <h3>Notification quotidienne</h3>
+          <p>Le Lutin te rappellera de pr\u00e9parer ta tenue pour demain\u00a0!</p>
+        </div>
+      </div>
+      <div class="time-picker-row">
+        <input type="time" id="notif-time" value="${tv}">
+        <button class="btn btn-small" onclick="saveNotifTime()">Enregistrer</button>
+        <button class="btn btn-small btn-golden" onclick="requestNotifPermission()">Activer</button>
+      </div>
+    </div>`;
+}
+
+// --- NOTIFICATIONS ---
+async function requestNotifPermission() {
+  if (!('Notification' in window)) { alert('Notifications non support\u00e9es.'); return; }
+  const perm = await Notification.requestPermission();
+  if (perm === 'granted') {
+    new Notification('Le Lutin M\u00e9t\u00e9o \u{1F344}', { body: 'Notifications activ\u00e9es\u00a0! Le Lutin te rappellera chaque soir.' });
+    scheduleNotification();
+  }
+}
+
+function saveNotifTime() {
+  const input = document.getElementById('notif-time');
+  if (!input) return;
+  const [h, m] = input.value.split(':');
+  localStorage.setItem(NOTIF_HOUR_KEY, h);
+  localStorage.setItem(NOTIF_MIN_KEY, m);
+  scheduleNotification();
+  alert('Rappel programm\u00e9 \u00e0 ' + h + 'h' + m + '\u00a0!');
+}
+
+function scheduleNotification() {
+  if (window._notifTimer) clearTimeout(window._notifTimer);
+  const hour = parseInt(localStorage.getItem(NOTIF_HOUR_KEY) || '20');
+  const min = parseInt(localStorage.getItem(NOTIF_MIN_KEY) || '00');
+  const now = new Date();
+  const target = new Date();
+  target.setHours(hour, min, 0, 0);
+  if (target <= now) target.setDate(target.getDate() + 1);
+  window._notifTimer = setTimeout(() => {
+    if (Notification.permission === 'granted') {
+      new Notification('Le Lutin M\u00e9t\u00e9o \u{1F344}', {
+        body: 'C\'est l\'heure de pr\u00e9parer ta tenue pour demain\u00a0! Ouvre l\'app.',
+        tag: 'lutin-evening'
+      });
+    }
+    scheduleNotification();
+  }, target - now);
+}
+
+// --- DECORATIONS ---
+function createMushroomSVG(c1, c2, size) {
+  return '<svg class="mushroom-svg" width="'+size+'" height="'+size+'" viewBox="0 0 60 70">'
+    + '<ellipse cx="30" cy="30" rx="25" ry="20" fill="'+c1+'"/>'
+    + '<circle cx="20" cy="24" r="4" fill="white" opacity="0.7"/>'
+    + '<circle cx="35" cy="20" r="3" fill="white" opacity="0.6"/>'
+    + '<circle cx="28" cy="32" r="2.5" fill="white" opacity="0.5"/>'
+    + '<rect x="25" y="38" width="10" height="22" rx="4" fill="'+c2+'"/>'
+    + '<ellipse cx="30" cy="60" rx="14" ry="4" fill="#3d5a3a" opacity="0.3"/>'
+    + '</svg>';
+}
+
+function addDecorations() {
+  const bg = document.querySelector('.forest-bg');
+  if (!bg) return;
+  for (let i = 0; i < 12; i++) {
+    const f = document.createElement('div');
+    f.className = 'firefly';
+    f.style.left = Math.random()*100+'%';
+    f.style.top = Math.random()*80+'%';
+    f.style.animationDelay = (Math.random()*6)+'s';
+    f.style.animationDuration = (4+Math.random()*4)+'s';
+    bg.appendChild(f);
+  }
+  const mushrooms = [
+    { left:'2%',  bottom:'15%', size:40, rot:-10, c1:'#c25a3a', c2:'#e8c9a0' },
+    { right:'3%', bottom:'25%', size:35, rot:8,   c1:'#8b6914', c2:'#d4a574' },
+    { left:'5%',  bottom:'45%', size:28, rot:-5,  c1:'#c07a8a', c2:'#e8c9a0' },
+    { right:'1%', bottom:'60%', size:32, rot:12,  c1:'#c25a3a', c2:'#d4a574' }
+  ];
+  for (const p of mushrooms) {
+    const d = document.createElement('div');
+    d.className = 'mushroom-deco';
+    if (p.left) d.style.left = p.left;
+    if (p.right) d.style.right = p.right;
+    d.style.bottom = p.bottom;
+    d.style.transform = 'rotate('+p.rot+'deg)';
+    d.innerHTML = createMushroomSVG(p.c1, p.c2, p.size);
+    bg.appendChild(d);
+  }
+}
+
+// --- MAIN ---
+async function init() {
+  const app = document.getElementById('app');
+  const loading = document.getElementById('loading');
+  addDecorations();
+
+  try {
+    const loc = await getLocation();
+    // After city search, re-show loading
+    loading.classList.remove('hidden');
+    const [weather, city] = await Promise.all([
+      fetchWeather(loc.lat, loc.lon),
+      reverseGeocode(loc.lat, loc.lon)
+    ]);
+
+    const temp = Math.round(weather.current.temperature_2m);
+    const code = weather.current.weather_code;
+    const wind = Math.round(weather.current.wind_speed_10m);
+    const rec = buildRecommendation(temp, code, wind);
+
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+
+    let html = '';
+    html += '<div class="refresh-bar"><div class="last-update">Mis \u00e0 jour \u00e0 ' + timeStr + '</div><button class="btn btn-small" onclick="localStorage.removeItem(\'' + LOCATION_KEY + '\');location.reload()">\u{1F504} Actualiser</button></div>';
+    html += renderWeather(weather, city);
+    html += renderFeeling(temp);
+    html += '<div class="card"><div class="card-title"><span class="icon">\u{1F550}</span> Heures \u00e0 venir</div>' + renderHourly(weather) + '</div>';
+    html += renderOutfit(rec, "Aujourd'hui");
+    html += renderTomorrow(weather);
+    html += renderNotif();
+    html += '<div style="text-align:center;padding:20px 0 40px;color:rgba(255,248,240,0.4);font-size:0.75rem;font-family:\'Playfair Display\',serif;font-style:italic;">\u{1F344} Fait avec amour pour le Lutin \u{1F344}</div>';
+
+    app.innerHTML = html;
+    loading.classList.add('hidden');
+
+    if (Notification.permission === 'granted') scheduleNotification();
+
+  } catch (err) {
+    console.error(err);
+    loading.classList.add('hidden');
+    app.innerHTML = '<div class="error-msg"><div class="error-icon">\u{1F344}</div><h2>Oh non\u00a0!</h2><p>' + (err.message || 'Le Lutin n\'arrive pas \u00e0 trouver la m\u00e9t\u00e9o...') + '</p><p>V\u00e9rifie que la g\u00e9olocalisation est activ\u00e9e et r\u00e9essaie.</p><button class="btn" onclick="localStorage.removeItem(\'' + LOCATION_KEY + '\');location.reload()">\u{1F504} R\u00e9essayer</button></div>';
+  }
+}
+
+// Service worker (HTTPS only)
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('./sw.js').catch(function(){});
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
