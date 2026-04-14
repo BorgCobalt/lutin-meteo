@@ -1,10 +1,8 @@
-const CACHE_NAME = 'lutin-meteo-v1';
+const CACHE_NAME = 'lutin-meteo-v2';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/app.js',
-  '/manifest.json'
+  './',
+  './index.html',
+  './manifest.json'
 ];
 
 self.addEventListener('install', e => {
@@ -22,7 +20,7 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  if (e.request.url.includes('api.open-meteo.com')) {
+  if (e.request.url.includes('api.open-meteo.com') || e.request.url.includes('nominatim')) {
     e.respondWith(
       fetch(e.request).catch(() => caches.match(e.request))
     );
@@ -35,5 +33,5 @@ self.addEventListener('fetch', e => {
 
 self.addEventListener('notificationclick', e => {
   e.notification.close();
-  e.waitUntil(clients.openWindow('/'));
+  e.waitUntil(clients.openWindow('./'));
 });
