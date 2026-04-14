@@ -1,7 +1,7 @@
 {
-  "name": "Le Lutin Météo",
-  "short_name": "Lutin Météo",
-  "description": "Conseils vestimentaires enchantés pour le Lutin",
+  "name": "Météo Patidou",
+  "short_name": "Météo Patidou",
+  "description": "Le meilleur allié des Lutin explorateurs",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#2d1b0e",

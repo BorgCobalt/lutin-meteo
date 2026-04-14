@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#1a2e1a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="description" content="Conseils vestimentaires enchantes pour le Lutin - bases sur la meteo">
+  <meta name="description" content="Le meilleur allie des Lutin explorateurs - Meteo Patidou">
   <link rel="manifest" href="manifest.json">
-  <title>Le Lutin M&eacute;t&eacute;o</title>
+  <title>M&eacute;t&eacute;o Patidou</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -48,7 +48,18 @@ body {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  background: linear-gradient(180deg, #1a2e1a 0%, #2a4a2a 30%, #3d5a3a 60%, #4a6b45 100%);
+  background: var(--bg-gradient);
+  transition: background 1s ease;
+}
+
+/* --- SUMMER THEME (>=20°C) --- */
+body.theme-summer {
+  --bg-gradient: linear-gradient(180deg, #1a2e1a 0%, #2a4a2a 30%, #3d5a3a 60%, #4a6b45 100%);
+}
+
+/* --- AUTUMN THEME (<20°C) --- */
+body.theme-autumn {
+  --bg-gradient: linear-gradient(180deg, #2b1a0e 0%, #3d2415 30%, #5c3620 50%, #6b4530 70%, #4a3525 100%);
 }
 
 .forest-bg::before {
@@ -243,19 +254,22 @@ body {
 
 /* Lutin feeling */
 .lutin-feeling {
-  background: linear-gradient(135deg, rgba(74,124,89,0.1), rgba(201,168,76,0.1));
+  background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(194,90,58,0.08));
   border-radius: 14px;
-  padding: 16px;
+  padding: 18px;
   margin-bottom: 16px;
-  border: 1px solid rgba(74,124,89,0.15);
+  border: 2px solid rgba(201,168,76,0.4);
+  box-shadow: 0 0 12px rgba(201,168,76,0.1), inset 0 0 20px rgba(201,168,76,0.05);
 }
 
 .lutin-feeling .feeling-text {
   font-family: 'Playfair Display', serif;
   font-size: 1.1rem;
   font-style: italic;
-  color: var(--bark);
+  color: #2d1b0e;
   text-align: center;
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .lutin-feeling .feeling-emoji {
@@ -263,6 +277,71 @@ body {
   display: block;
   text-align: center;
   margin-bottom: 6px;
+}
+
+/* Autumn theme feeling */
+body.theme-autumn .lutin-feeling {
+  background: linear-gradient(135deg, rgba(194,90,58,0.15), rgba(139,54,30,0.1));
+  border-color: rgba(212,165,116,0.5);
+  box-shadow: 0 0 12px rgba(212,165,116,0.15), inset 0 0 20px rgba(212,165,116,0.05);
+}
+
+/* Summer theme feeling */
+body.theme-summer .lutin-feeling {
+  background: linear-gradient(135deg, rgba(74,124,89,0.15), rgba(201,168,76,0.1));
+  border-color: rgba(168,192,154,0.5);
+  box-shadow: 0 0 12px rgba(74,124,89,0.15), inset 0 0 20px rgba(74,124,89,0.05);
+}
+
+/* Floating critters */
+.critter {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  font-size: 1.2rem;
+  opacity: 0.6;
+  animation: critter-float 8s ease-in-out infinite;
+}
+
+@keyframes critter-float {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(8px, -12px) rotate(5deg); }
+  50% { transform: translate(-5px, -20px) rotate(-3deg); }
+  75% { transform: translate(12px, -8px) rotate(4deg); }
+}
+
+/* Falling leaves */
+.falling-leaf {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  font-size: 1rem;
+  opacity: 0.5;
+  animation: leaf-fall linear infinite;
+}
+
+@keyframes leaf-fall {
+  0% { transform: translateY(-20px) rotate(0deg) translateX(0); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(100vh) rotate(360deg) translateX(40px); opacity: 0; }
+}
+
+/* Ladybug crawl */
+.ladybug {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  font-size: 1rem;
+  animation: ladybug-crawl 12s ease-in-out infinite;
+}
+
+@keyframes ladybug-crawl {
+  0% { transform: translate(0,0) rotate(0deg); }
+  25% { transform: translate(20px, -30px) rotate(15deg); }
+  50% { transform: translate(-10px, -50px) rotate(-10deg); }
+  75% { transform: translate(15px, -20px) rotate(5deg); }
+  100% { transform: translate(0,0) rotate(0deg); }
 }
 
 /* Outfit */
@@ -507,6 +586,13 @@ body::before, body::after {
 body::before { left: 0; background: linear-gradient(90deg, rgba(26,46,26,0.3), transparent); }
 body::after { right: 0; background: linear-gradient(-90deg, rgba(26,46,26,0.3), transparent); }
 
+body.theme-autumn::before { background: linear-gradient(90deg, rgba(43,26,14,0.4), transparent); }
+body.theme-autumn::after { background: linear-gradient(-90deg, rgba(43,26,14,0.4), transparent); }
+
+body.theme-autumn .app-container::after {
+  background: linear-gradient(transparent, rgba(43,26,14,0.8));
+}
+
 /* City search fallback */
 .city-search {
   text-align: center;
@@ -585,13 +671,13 @@ body::after { right: 0; background: linear-gradient(-90deg, rgba(26,46,26,0.3), 
 
   <div class="loading-screen" id="loading">
     <div class="loading-mushroom">&#127812;</div>
-    <div class="loading-text">Le Lutin consulte la for&ecirc;t...</div>
+    <div class="loading-text">Le Chevalier chemine vers son laboratoire m&eacute;t&eacute;o...</div>
   </div>
 
   <div class="app-container">
     <div class="header">
-      <h1>Le Lutin M&eacute;t&eacute;o</h1>
-      <div class="subtitle">Conseils vestimentaires enchant&eacute;s</div>
+      <h1>M&eacute;t&eacute;o Patidou</h1>
+      <div class="subtitle">Le meilleur alli&eacute; des Lutin explorateurs</div>
       <div class="header-mushrooms">&#127812;&#127807;&#127810;&#127807;&#127812;</div>
     </div>
     <div id="app"></div>
@@ -611,9 +697,9 @@ const LOCATION_KEY = 'lutin_location';
 const LUTIN_FEELINGS = [
   { max: 5,  label: 'Glacial Absolu', emoji: '\u{1F976}', quote: 'Le Lutin grelotte... Il faut TOUT sortir du placard\u00a0!', color: '#5b7fa5' },
   { max: 10, label: 'Glacial',        emoji: '\u2744\uFE0F', quote: 'Le Lutin a besoin de son armure de chaleur\u00a0!', color: '#6a8fb5' },
-  { max: 15, label: 'Froid',          emoji: '\u{1F342}', quote: 'Le Lutin frissonne... des couches, des couches\u00a0!', color: '#8b7355' },
+  { max: 15, label: 'Froid',          emoji: '\u{1F342}', quote: 'Le Lutin frissonne, ce n\'est PAS agr\u00e9able. Il faut du chaud et de la douceur\u00a0!', color: '#8b7355' },
   { max: 20, label: 'Frais',          emoji: '\u{1F33F}', quote: 'Le Lutin veut rester au chaud, mais avec style.', color: '#5a8a5a' },
-  { max: 25, label: 'Presque Parfait',emoji: '\u{1F338}', quote: 'Le Lutin commence \u00e0 sourire... presque le bonheur.', color: '#c07a8a' },
+  { max: 25, label: 'Presque Parfait',emoji: '\u{1F338}', quote: 'Le Lutin sort lentement de l\'hibernation terrible des nuits glaciales, c\'est PRESQUE parfait.', color: '#c07a8a' },
   { max: 30, label: 'Perfection',     emoji: '\u2600\uFE0F', quote: 'Le Lutin est au paradis\u00a0! Temp\u00e9rature id\u00e9ale.', color: '#c9a84c' },
   { max: 99, label: 'Fournaise',      emoji: '\u{1F525}', quote: 'M\u00eame le Lutin frileux trouve qu\'il fait chaud\u00a0!', color: '#c25a3a' }
 ];
@@ -930,11 +1016,11 @@ function renderWeather(data, cityName) {
 
 function renderFeeling(temp) {
   const f = getLutinFeeling(temp);
-  return `<div class="lutin-feeling"><span class="feeling-emoji">${f.emoji}</span><div class="feeling-text">&laquo;&nbsp;${f.quote}&nbsp;&raquo;</div></div>`;
+  return `<div class="lutin-feeling"><span class="feeling-emoji">${f.emoji}</span><div class="feeling-text">${f.quote}</div></div>`;
 }
 
 function renderOutfit(rec, label) {
-  let h = `<div class="card"><div class="card-title"><span class="icon">\u{1F454}</span> Tenue ${label}</div><div class="outfit-section"><div class="outfit-occasion">SUGGESTION DU LUTIN</div><div class="outfit-items">`;
+  let h = `<div class="card"><div class="card-title"><span class="icon">\u{1F454}</span> Tenue ${label}</div><div class="outfit-section"><div class="outfit-occasion">SUGGESTION DE LA CENTRALE M\u00c9T\u00c9O DU PATIDOU</div><div class="outfit-items">`;
   for (const item of rec.layers) {
     h += `<div class="outfit-item"><div class="item-icon">${item.icon}</div><div class="item-info"><div class="item-name">${item.name}</div><div class="item-detail">${item.detail}</div></div><div class="item-layer">${item.layer}</div></div>`;
   }
@@ -986,7 +1072,7 @@ function renderTomorrow(data) {
         </div>
         <div class="weather-feeling" style="background:${f.color}">${f.emoji} ${f.label}</div>
       </div>
-      <div class="lutin-feeling" style="margin-bottom:0"><span class="feeling-emoji">${f.emoji}</span><div class="feeling-text">&laquo;&nbsp;${f.quote}&nbsp;&raquo;</div></div>
+      <div class="lutin-feeling" style="margin-bottom:0"><span class="feeling-emoji">${f.emoji}</span><div class="feeling-text">${f.quote}</div></div>
     </div>`;
   h += renderOutfit(rec, 'pour Demain');
   return h;
@@ -1002,7 +1088,7 @@ function renderNotif() {
       <div class="notif-card">
         <div class="notif-text">
           <h3>Notification quotidienne</h3>
-          <p>Le Lutin te rappellera de pr\u00e9parer ta tenue pour demain\u00a0!</p>
+          <p>Le ChampiM\u00e9t\u00e9o te rappellera de pr\u00e9parer ta tenue pour demain\u00a0!</p>
         </div>
       </div>
       <div class="time-picker-row">
@@ -1018,7 +1104,7 @@ async function requestNotifPermission() {
   if (!('Notification' in window)) { alert('Notifications non support\u00e9es.'); return; }
   const perm = await Notification.requestPermission();
   if (perm === 'granted') {
-    new Notification('Le Lutin M\u00e9t\u00e9o \u{1F344}', { body: 'Notifications activ\u00e9es\u00a0! Le Lutin te rappellera chaque soir.' });
+    new Notification('M\u00e9t\u00e9o Patidou \u{1F344}', { body: 'Notifications activ\u00e9es\u00a0! Le ChampiM\u00e9t\u00e9o te rappellera chaque soir.' });
     scheduleNotification();
   }
 }
@@ -1043,7 +1129,7 @@ function scheduleNotification() {
   if (target <= now) target.setDate(target.getDate() + 1);
   window._notifTimer = setTimeout(() => {
     if (Notification.permission === 'granted') {
-      new Notification('Le Lutin M\u00e9t\u00e9o \u{1F344}', {
+      new Notification('M\u00e9t\u00e9o Patidou \u{1F344}', {
         body: 'C\'est l\'heure de pr\u00e9parer ta tenue pour demain\u00a0! Ouvre l\'app.',
         tag: 'lutin-evening'
       });
@@ -1064,9 +1150,25 @@ function createMushroomSVG(c1, c2, size) {
     + '</svg>';
 }
 
-function addDecorations() {
+function applyTheme(temp) {
+  const isSummer = temp >= 20;
+  document.body.className = isSummer ? 'theme-summer' : 'theme-autumn';
+
   const bg = document.querySelector('.forest-bg');
   if (!bg) return;
+
+  // Clear old decorations
+  bg.querySelectorAll('.firefly,.mushroom-deco,.critter,.falling-leaf,.ladybug').forEach(el => el.remove());
+
+  if (isSummer) {
+    addSummerDecorations(bg);
+  } else {
+    addAutumnDecorations(bg);
+  }
+}
+
+function addSummerDecorations(bg) {
+  // Fireflies
   for (let i = 0; i < 12; i++) {
     const f = document.createElement('div');
     f.className = 'firefly';
@@ -1076,6 +1178,7 @@ function addDecorations() {
     f.style.animationDuration = (4+Math.random()*4)+'s';
     bg.appendChild(f);
   }
+  // Mushrooms
   const mushrooms = [
     { left:'2%',  bottom:'15%', size:40, rot:-10, c1:'#c25a3a', c2:'#e8c9a0' },
     { right:'3%', bottom:'25%', size:35, rot:8,   c1:'#8b6914', c2:'#d4a574' },
@@ -1092,13 +1195,75 @@ function addDecorations() {
     d.innerHTML = createMushroomSVG(p.c1, p.c2, p.size);
     bg.appendChild(d);
   }
+  // Ladybugs
+  const ladybugs = [
+    { left:'8%', bottom:'35%' }, { right:'6%', bottom:'50%' },
+    { left:'12%', bottom:'70%' }, { right:'10%', bottom:'20%' }
+  ];
+  for (const p of ladybugs) {
+    const d = document.createElement('div');
+    d.className = 'ladybug';
+    if (p.left) d.style.left = p.left;
+    if (p.right) d.style.right = p.right;
+    d.style.bottom = p.bottom;
+    d.style.animationDelay = (Math.random()*8)+'s';
+    d.textContent = '\u{1F41E}';
+    bg.appendChild(d);
+  }
+}
+
+function addAutumnDecorations(bg) {
+  // Warm glowing particles instead of fireflies
+  for (let i = 0; i < 10; i++) {
+    const f = document.createElement('div');
+    f.className = 'firefly';
+    f.style.left = Math.random()*100+'%';
+    f.style.top = Math.random()*80+'%';
+    f.style.animationDelay = (Math.random()*6)+'s';
+    f.style.animationDuration = (5+Math.random()*5)+'s';
+    f.style.background = '#d4a574';
+    f.style.boxShadow = '0 0 8px 3px rgba(212,165,116,0.4), 0 0 16px 6px rgba(212,165,116,0.2)';
+    bg.appendChild(f);
+  }
+  // Falling leaves
+  const leaves = ['\u{1F341}', '\u{1F342}', '\u{1F343}', '\u{1F341}', '\u{1F342}', '\u{1F343}', '\u{1F341}', '\u{1F342}'];
+  for (let i = 0; i < leaves.length; i++) {
+    const d = document.createElement('div');
+    d.className = 'falling-leaf';
+    d.textContent = leaves[i];
+    d.style.left = (5 + Math.random()*90)+'%';
+    d.style.animationDuration = (8 + Math.random()*8)+'s';
+    d.style.animationDelay = (Math.random()*10)+'s';
+    d.style.fontSize = (0.8 + Math.random()*0.6)+'rem';
+    bg.appendChild(d);
+  }
+  // Critters: hedgehogs and crows
+  const critters = [
+    { emoji:'\u{1F994}', left:'3%',  bottom:'12%' },
+    { emoji:'\u{1F994}', right:'4%', bottom:'8%' },
+    { emoji:'\u{1F426}\u200D\u2B1B', left:'6%',  bottom:'55%' },
+    { emoji:'\u{1F426}\u200D\u2B1B', right:'5%', bottom:'40%' },
+    { emoji:'\u{1F426}\u200D\u2B1B', left:'2%',  bottom:'75%' }
+  ];
+  for (const c of critters) {
+    const d = document.createElement('div');
+    d.className = 'critter';
+    d.textContent = c.emoji;
+    if (c.left) d.style.left = c.left;
+    if (c.right) d.style.right = c.right;
+    d.style.bottom = c.bottom;
+    d.style.animationDelay = (Math.random()*6)+'s';
+    d.style.animationDuration = (6+Math.random()*6)+'s';
+    bg.appendChild(d);
+  }
 }
 
 // --- MAIN ---
 async function init() {
   const app = document.getElementById('app');
   const loading = document.getElementById('loading');
-  addDecorations();
+  // Default theme until weather loads
+  document.body.className = 'theme-autumn';
 
   try {
     const loc = await getLocation();
@@ -1113,6 +1278,9 @@ async function init() {
     const code = weather.current.weather_code;
     const wind = Math.round(weather.current.wind_speed_10m);
     const rec = buildRecommendation(temp, code, wind);
+
+    // Apply theme based on temperature
+    applyTheme(temp);
 
     const now = new Date();
     const timeStr = now.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
