@@ -1,7 +1,7 @@
 {
   "name": "Météo Patidou",
   "short_name": "Météo Patidou",
-  "description": "Le meilleur allié des Lutin explorateurs",
+  "description": "Le meilleur allié des Lutins explorateurs",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#2d1b0e",
