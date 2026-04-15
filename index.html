@@ -378,13 +378,21 @@ body.theme-summer .lutin-feeling {
 
 .outfit-item .item-icon {
   font-size: 1.8rem;
-  width: 44px; height: 44px;
+  width: 56px; height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(74,124,89,0.1);
   border-radius: 12px;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.outfit-item .item-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
 }
 
 .outfit-item .item-info { flex: 1; }
@@ -710,7 +718,7 @@ const OUTFITS = {
   glacial_absolu: {
     layers: [
       { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut, toujours', layer: 'Base' },
-      { icon: '\u{1F9F6}', name: 'Pull-over bien doux', detail: 'Le plus chaud et moelleux', layer: 'Milieu' },
+      { icon: '\u{1F9F6}', name: 'Pull-over bien doux', detail: 'Le plus chaud et moelleux', layer: 'Milieu', imgCat: 'pulls' },
       { icon: '\u{1F9E5}', name: 'Manteau chaud', detail: 'Le gros manteau d\'hiver', layer: 'Dessus' },
       { icon: '\u{1F456}', name: 'Pantalon en coton \u00e9pais', detail: 'Ou jean moulant avec collants', layer: 'Bas' },
       { icon: '\u{1F462}', name: 'Bottes chaudes', detail: 'Bien ferm\u00e9es, bien isol\u00e9es', layer: 'Pieds' }
@@ -724,7 +732,7 @@ const OUTFITS = {
   glacial: {
     layers: [
       { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
-      { icon: '\u{1F9F6}', name: 'Pull-over doux', detail: 'Chaud et \u00e9l\u00e9gant', layer: 'Milieu' },
+      { icon: '\u{1F9F6}', name: 'Pull-over doux', detail: 'Chaud et \u00e9l\u00e9gant', layer: 'Milieu', imgCat: 'pulls' },
       { icon: '\u{1F9E5}', name: 'Manteau', detail: 'Manteau bien chaud', layer: 'Dessus' },
       { icon: '\u{1F456}', name: 'Jean moulant', detail: 'Ou pantalon en coton chaud', layer: 'Bas' },
       { icon: '\u{1F462}', name: 'Chaussures ferm\u00e9es', detail: 'Chaudes et \u00e9l\u00e9gantes', layer: 'Pieds' }
@@ -737,7 +745,7 @@ const OUTFITS = {
   froid: {
     layers: [
       { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
-      { icon: '\u{1F9F6}', name: 'Pull-over doux', detail: 'Moelleux et chic', layer: 'Milieu' },
+      { icon: '\u{1F9F6}', name: 'Pull-over doux', detail: 'Moelleux et chic', layer: 'Milieu', imgCat: 'pulls' },
       { icon: '\u{1F9E5}', name: 'Veste chaude', detail: 'Veste \u00e9l\u00e9gante ou manteau l\u00e9ger', layer: 'Dessus' },
       { icon: '\u{1F456}', name: 'Pantalon en coton', detail: 'Ou jean moulant', layer: 'Bas' },
       { icon: '\u{1F45F}', name: 'Chaussures ferm\u00e9es', detail: 'Confortables et chaudes', layer: 'Pieds' }
@@ -749,7 +757,7 @@ const OUTFITS = {
   frais: {
     layers: [
       { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
-      { icon: '\u{1F454}', name: 'Chemise ou pull l\u00e9ger', detail: 'Chemise \u00e9l\u00e9gante ou pull fin', layer: 'Milieu' },
+      { icon: '\u{1F454}', name: 'Chemise ou pull l\u00e9ger', detail: 'Chemise \u00e9l\u00e9gante ou pull fin', layer: 'Milieu', imgCat: 'pulls' },
       { icon: '\u{1F9E5}', name: 'Veste', detail: 'Veste l\u00e9g\u00e8re pour les couches', layer: 'Dessus' },
       { icon: '\u{1F456}', name: 'Jean moulant ou jupe', detail: 'Avec collants si jupe', layer: 'Bas' },
       { icon: '\u{1F45F}', name: 'Chaussures de saison', detail: '\u00c9l\u00e9gantes et confortables', layer: 'Pieds' }
@@ -788,6 +796,26 @@ const OUTFITS = {
     ]
   }
 };
+
+// --- CLOTHING PHOTO CATALOGUE ---
+const CATALOGUE = {
+  pulls: Array.from({length: 27}, (_, i) => 'assets/clothes/pulls/pull_' + String(i+1).padStart(2,'0') + '.png')
+};
+
+function randomFromCatalogue(category) {
+  const items = CATALOGUE[category];
+  if (!items || items.length === 0) return null;
+  return items[Math.floor(Math.random() * items.length)];
+}
+
+// Use a daily seed so the same outfit shows all day but changes tomorrow
+function dailyRandomFromCatalogue(category, salt) {
+  const items = CATALOGUE[category];
+  if (!items || items.length === 0) return null;
+  const today = new Date();
+  const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate() + (salt || 0);
+  return items[seed % items.length];
+}
 
 const RAIN_ITEMS = [
   { icon: '\u{1F302}', name: 'Parapluie' },
@@ -1020,10 +1048,14 @@ function renderFeeling(temp) {
   return `<div class="lutin-feeling"><span class="feeling-emoji">${f.emoji}</span><div class="feeling-text">${f.quote}</div></div>`;
 }
 
-function renderOutfit(rec, label) {
+function renderOutfit(rec, label, daySalt) {
+  const salt = daySalt || 0;
   let h = `<div class="card"><div class="card-title"><span class="icon">\u{1F454}</span> Tenue ${label}</div><div class="outfit-section"><div class="outfit-occasion">SUGGESTION DE LA CENTRALE M\u00c9T\u00c9O DU PATIDOU</div><div class="outfit-items">`;
-  for (const item of rec.layers) {
-    h += `<div class="outfit-item"><div class="item-icon">${item.icon}</div><div class="item-info"><div class="item-name">${item.name}</div><div class="item-detail">${item.detail}</div></div><div class="item-layer">${item.layer}</div></div>`;
+  for (let i = 0; i < rec.layers.length; i++) {
+    const item = rec.layers[i];
+    const imgSrc = item.imgCat ? dailyRandomFromCatalogue(item.imgCat, i + salt * 100) : null;
+    const iconHtml = imgSrc ? '<img src="' + imgSrc + '" alt="' + item.name + '">' : item.icon;
+    h += `<div class="outfit-item"><div class="item-icon">${iconHtml}</div><div class="item-info"><div class="item-name">${item.name}</div><div class="item-detail">${item.detail}</div></div><div class="item-layer">${item.layer}</div></div>`;
   }
   h += '</div>';
   if (rec.accessories.length > 0) {
@@ -1075,7 +1107,7 @@ function renderTomorrow(data) {
       </div>
       <div class="lutin-feeling" style="margin-bottom:0"><span class="feeling-emoji">${f.emoji}</span><div class="feeling-text">${f.quote}</div></div>
     </div>`;
-  h += renderOutfit(rec, 'pour Demain');
+  h += renderOutfit(rec, 'pour Demain', 1);
   return h;
 }
 
@@ -1291,7 +1323,7 @@ async function init() {
     html += renderWeather(weather, city);
     html += renderFeeling(temp);
     html += '<div class="card"><div class="card-title"><span class="icon">\u{1F550}</span> Heures \u00e0 venir</div>' + renderHourly(weather) + '</div>';
-    html += renderOutfit(rec, "Aujourd'hui");
+    html += renderOutfit(rec, "Aujourd'hui", 0);
     html += renderTomorrow(weather);
     html += renderNotif();
     html += '<div style="text-align:center;padding:20px 0 40px;color:rgba(255,248,240,0.4);font-size:0.75rem;font-family:\'Playfair Display\',serif;font-style:italic;">\u{1F344} Fait avec amour pour le Lutin \u{1F344}</div>';
