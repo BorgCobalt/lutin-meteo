@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lutin-meteo-v7';
+const CACHE_NAME = 'lutin-meteo-v8';
 const ASSETS = [
   './',
   './index.html',
