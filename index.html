@@ -1305,18 +1305,33 @@ function renderHourly(data) {
   return h + '</div>';
 }
 
+function renderTomorrowHourly(data) {
+  const t = new Date();
+  t.setDate(t.getDate() + 1);
+  const prefix = t.getFullYear() + '-'
+    + String(t.getMonth() + 1).padStart(2, '0') + '-'
+    + String(t.getDate()).padStart(2, '0');
+  let h = '<div class="hourly-scroll">';
+  for (let i = 0; i < data.hourly.time.length; i++) {
+    if (!data.hourly.time[i].startsWith(prefix)) continue;
+    const hr   = new Date(data.hourly.time[i]).getHours().toString().padStart(2, '0') + 'h';
+    const temp = Math.round(data.hourly.temperature_2m[i]);
+    const wI   = weatherCodeToInfo(data.hourly.weather_code[i]);
+    h += `<div class="hourly-item"><div class="hour">${hr}</div><span class="h-icon">${wI.icon}</span><div class="h-temp">${temp}\u00b0</div></div>`;
+  }
+  return h + '</div>';
+}
+
 function renderTomorrow(data) {
-  const d = data.daily;
-  const max = Math.round(d.temperature_2m_max[1]);
-  const min = Math.round(d.temperature_2m_min[1]);
+  const d    = data.daily;
+  const max  = Math.round(d.temperature_2m_max[1]);
+  const min  = Math.round(d.temperature_2m_min[1]);
   const code = d.weather_code[1];
   const wind = Math.round(d.wind_speed_10m_max[1]);
-  const wI = weatherCodeToInfo(code);
-  const avg = Math.round((max + min) / 2);
-  const rec    = buildRecommendation(avg, code, wind, null);
-  const f      = getLutinFeeling(avg);
-  const felKey = getOutfitKey(avg);
-  const fe     = f.emoji;
+  const wI   = weatherCodeToInfo(code);
+  const avg  = Math.round((max + min) / 2);
+  const rec  = buildRecommendation(avg, code, wind, null);
+  const f    = getLutinFeeling(avg);
   let h = `
     <div class="card">
       <div class="card-title"><span class="icon">\u{1F52E}</span> Demain</div>
@@ -1325,14 +1340,9 @@ function renderTomorrow(data) {
           <div class="tomorrow-icon">${wI.icon}</div>
           <div class="tomorrow-temps"><div class="temp-max">${max}\u00b0</div><div class="temp-min">${min}\u00b0 min</div></div>
         </div>
-        <div class="weather-feeling" style="background:${f.color}">${fe} ${f.label}</div>
+        <div class="weather-feeling" style="background:${f.color}">${f.emoji} ${f.label}</div>
       </div>
-      <div class="lutin-feeling" data-feeling="${felKey}" style="margin-bottom:0;--fc:${f.color}">
-        <div class="feeling-corner tl">${fe}</div><div class="feeling-corner tr">${fe}</div>
-        <span class="feeling-emoji">${fe}</span>
-        <div class="feeling-text">${f.quote}</div>
-        <div class="feeling-corner bl">${fe}</div><div class="feeling-corner br">${fe}</div>
-      </div>
+      ${renderTomorrowHourly(data)}
     </div>`;
   h += renderOutfit(rec, 'pour Demain', 1);
   return h;
