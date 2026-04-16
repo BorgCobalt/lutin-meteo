@@ -718,7 +718,7 @@ const LUTIN_FEELINGS = [
 const OUTFITS = {
   glacial_absolu: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut, toujours', layer: 'Base', imgCat: 'tops' },
+      { icon: '\u{1F455}', name: 'T-shirt/Haut', detail: 'Haut de base, toujours', layer: 'Base', imgCat: 'tops' },
       { icon: '\u{1F9F6}', name: 'Pull-over bien doux', detail: 'Le plus chaud et moelleux', layer: 'Milieu', imgCat: 'pulls' },
       { icon: '\u{1F9E5}', name: 'Manteau chaud', detail: 'Le gros manteau d\'hiver', layer: 'Dessus' },
       { icon: '\u{1F456}', name: 'Pantalon en coton \u00e9pais', detail: 'Ou jean moulant avec collants', layer: 'Bas' },
@@ -732,7 +732,7 @@ const OUTFITS = {
   },
   glacial: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base', imgCat: 'tops' },
+      { icon: '\u{1F455}', name: 'T-shirt/Haut', detail: 'T-shirt ou haut du corps', layer: 'Base', imgCat: 'tops' },
       { icon: '\u{1F9F6}', name: 'Pull-over doux', detail: 'Chaud et \u00e9l\u00e9gant', layer: 'Milieu', imgCat: 'pulls' },
       { icon: '\u{1F9E5}', name: 'Manteau', detail: 'Manteau bien chaud', layer: 'Dessus' },
       { icon: '\u{1F456}', name: 'Jean moulant', detail: 'Ou pantalon en coton chaud', layer: 'Bas' },
@@ -745,7 +745,7 @@ const OUTFITS = {
   },
   froid: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base', imgCat: 'tops' },
+      { icon: '\u{1F455}', name: 'T-shirt/Haut', detail: 'T-shirt ou haut du corps', layer: 'Base', imgCat: 'tops' },
       { icon: '\u{1F9F6}', name: 'Pull-over doux', detail: 'Moelleux et chic', layer: 'Milieu', imgCat: 'pulls' },
       { icon: '\u{1F9E5}', name: 'Veste chaude', detail: 'Veste \u00e9l\u00e9gante ou manteau l\u00e9ger', layer: 'Dessus' },
       { icon: '\u{1F456}', name: 'Pantalon en coton', detail: 'Ou jean moulant', layer: 'Bas' },
@@ -757,7 +757,7 @@ const OUTFITS = {
   },
   frais: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base', imgCat: 'tops' },
+      { icon: '\u{1F455}', name: 'T-shirt/Haut', detail: 'T-shirt ou haut du corps', layer: 'Base', imgCat: 'tops' },
       { icon: '\u{1F454}', name: 'Chemise ou pull l\u00e9ger', detail: 'Chemise \u00e9l\u00e9gante ou pull fin', layer: 'Milieu', imgCat: 'pulls' },
       { icon: '\u{1F9E5}', name: 'Veste', detail: 'Veste l\u00e9g\u00e8re pour les couches', layer: 'Dessus' },
       { icon: '\u{1F456}', name: 'Jean moulant ou jupe', detail: 'Avec collants si jupe', layer: 'Bas' },
@@ -767,7 +767,7 @@ const OUTFITS = {
   },
   presque_parfait: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top', detail: 'Haut du corps visible ou sous la veste', layer: 'Base', imgCat: 'tops' },
+      { icon: '\u{1F455}', name: 'T-shirt/Haut', detail: 'Haut du corps visible ou sous la veste', layer: 'Base', imgCat: 'tops' },
       { icon: '\u{1F454}', name: 'Chemise l\u00e9g\u00e8re', detail: 'Ou pull-over fin et doux', layer: 'Haut', imgCat: 'pulls' },
       { icon: '\u{1F456}', name: 'Jean moulant ou jupe', detail: 'Pantalon coton ou jupe \u00e9l\u00e9gante', layer: 'Bas' },
       { icon: '\u{1F45F}', name: 'Chaussures l\u00e9g\u00e8res', detail: 'Ou sandales si beau temps', layer: 'Pieds' }
@@ -779,7 +779,7 @@ const OUTFITS = {
   perfection: {
     layers: [
       { icon: '\u{1F457}', name: 'Robe ou combinaison', detail: 'Printemps/\u00e9t\u00e9 : la robe du jour\u00a0!', layer: 'Tenue', imgCat: 'robes' },
-      { icon: '\u{1F455}', name: 'Top l\u00e9ger', detail: 'Si pas de robe, top du jour', layer: 'Haut', imgCat: 'tops' },
+      { icon: '\u{1F455}', name: 'T-shirt/Crop top', detail: 'Si pas de robe, le haut du jour', layer: 'Haut', imgCat: ['tops', 'crop_tops'] },
       { icon: '\u{1FA73}', name: 'Shorty ou jupe', detail: 'Pantalon l\u00e9ger, jupe ou shorty chic', layer: 'Bas' },
       { icon: '\u{1FA74}', name: 'Sandales', detail: 'Pieds libres, bonheur\u00a0!', layer: 'Pieds' }
     ],
@@ -788,7 +788,7 @@ const OUTFITS = {
   fournaise: {
     layers: [
       { icon: '\u{1F457}', name: 'Robe ou combinaison l\u00e9g\u00e8re', detail: 'Printemps/\u00e9t\u00e9 : maximum l\u00e9g\u00e8ret\u00e9\u00a0!', layer: 'Tenue', imgCat: 'robes' },
-      { icon: '\u{1F455}', name: 'Top le plus l\u00e9ger', detail: 'Si pas de robe, le minimum avec gr\u00e2ce', layer: 'Haut', imgCat: 'tops' },
+      { icon: '\u{1F455}', name: 'T-shirt/Crop top', detail: 'Si pas de robe, le minimum avec grâce', layer: 'Haut', imgCat: ['tops', 'crop_tops'] },
       { icon: '\u{1FA73}', name: 'Shorty ou jupe', detail: 'A\u00e9ration maximale', layer: 'Bas' },
       { icon: '\u{1FA74}', name: 'Sandales', detail: 'Pieds libres\u00a0!', layer: 'Pieds' }
     ],
@@ -802,21 +802,34 @@ const OUTFITS = {
 // --- CLOTHING PHOTO CATALOGUE ---
 // seasons: null = toute l'année | ['printemps','ete'] = saisonnier
 const CATALOGUE = {
-  pulls:   { items: Array.from({length: 27}, (_, i) => 'assets/clothes/pulls/pull_' + String(i+1).padStart(2,'0') + '.png'), seasons: null },
-  tops:    { items: Array.from({length: 37}, (_, i) => 'assets/clothes/tops/top_'   + String(i+1).padStart(2,'0') + '.png'), seasons: null },
-  robes:   { items: Array.from({length:  6}, (_, i) => 'assets/clothes/robes/robe_' + String(i+1).padStart(2,'0') + '.png'), seasons: ['printemps','ete'] }
+  pulls:     { items: Array.from({length: 27}, (_, i) => 'assets/clothes/pulls/pull_'         + String(i+1).padStart(2,'0') + '.png'), seasons: null },
+  tops:      { items: Array.from({length: 37}, (_, i) => 'assets/clothes/tops/top_'           + String(i+1).padStart(2,'0') + '.png'), seasons: null },
+  crop_tops: { items: Array.from({length:  8}, (_, i) => 'assets/clothes/crop_tops/crop_top_' + String(i+1).padStart(2,'0') + '.png'), seasons: ['printemps','ete'] },
+  robes:     { items: Array.from({length:  6}, (_, i) => 'assets/clothes/robes/robe_'         + String(i+1).padStart(2,'0') + '.png'), seasons: ['printemps','ete'] }
 };
 
 // Retourne une image du catalogue avec seed quotidien.
-// Retourne null si la catégorie est hors-saison.
+// category peut être un string OU un tableau de catégories (pool fusionné, filtré par saison).
+// Retourne null si toutes les catégories sont hors-saison ou vides.
 function dailyRandomFromCatalogue(category, salt) {
+  const season = getSeason();
+  // --- Tableau de catégories : pool fusionné ---
+  if (Array.isArray(category)) {
+    const pool = category.flatMap(catName => {
+      const cat = CATALOGUE[catName];
+      if (!cat || cat.items.length === 0) return [];
+      if (cat.seasons && !cat.seasons.includes(season)) return [];
+      return cat.items;
+    });
+    if (pool.length === 0) return null;
+    const today = new Date();
+    const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate() + (salt || 0);
+    return pool[seed % pool.length];
+  }
+  // --- Catégorie unique ---
   const cat = CATALOGUE[category];
   if (!cat || cat.items.length === 0) return null;
-  // Vérif saisonnière
-  if (cat.seasons) {
-    const s = getSeason();
-    if (!cat.seasons.includes(s)) return null;  // hors saison → emoji à la place
-  }
+  if (cat.seasons && !cat.seasons.includes(season)) return null;
   const today = new Date();
   const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate() + (salt || 0);
   return cat.items[seed % cat.items.length];
