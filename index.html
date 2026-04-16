@@ -963,11 +963,20 @@ const CATALOGUE = {
   robes:     { items: Array.from({length:  6}, (_, i) => 'assets/clothes/robes/robe_'         + String(i+1).padStart(2,'0') + '.png'), seasons: ['printemps','ete'] }
 };
 
-// Retourne une image du catalogue avec seed quotidien.
+// Retourne une image du catalogue avec seed quotidien (hash non-séquentiel).
 // category peut être un string OU un tableau de catégories (pool fusionné, filtré par saison).
 // Retourne null si toutes les catégories sont hors-saison ou vides.
 function dailyRandomFromCatalogue(category, salt) {
   const season = getSeason();
+  const today  = new Date();
+  // Numéro de jour dans l'année (0-365) → unique par jour, différent chaque année
+  const dayN   = Math.floor((today - new Date(today.getFullYear(), 0, 1)) / 86400000);
+  const dayId  = today.getFullYear() * 366 + dayN; // entier unique par jour calendaire
+  // Hash multiplicatif : grands nombres premiers → sauts non-séquentiels entre jours
+  // (step ~15 tops, ~20 pulls, ~5 robes — au lieu de +1 chaque jour)
+  const h = ((Math.imul(dayId + 1, 374761397)
+            + Math.imul((salt || 0) + 1, 1274126177)) >>> 0);
+
   // --- Tableau de catégories : pool fusionné ---
   if (Array.isArray(category)) {
     const pool = category.flatMap(catName => {
@@ -977,17 +986,13 @@ function dailyRandomFromCatalogue(category, salt) {
       return cat.items;
     });
     if (pool.length === 0) return null;
-    const today = new Date();
-    const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate() + (salt || 0);
-    return pool[seed % pool.length];
+    return pool[h % pool.length];
   }
   // --- Catégorie unique ---
   const cat = CATALOGUE[category];
   if (!cat || cat.items.length === 0) return null;
   if (cat.seasons && !cat.seasons.includes(season)) return null;
-  const today = new Date();
-  const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate() + (salt || 0);
-  return cat.items[seed % cat.items.length];
+  return cat.items[h % cat.items.length];
 }
 
 const RAIN_ITEMS = [
