@@ -778,7 +778,8 @@ const OUTFITS = {
   },
   perfection: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top l\u00e9ger', detail: 'Le top du jour, profites-en\u00a0!', layer: 'Haut', imgCat: 'tops' },
+      { icon: '\u{1F457}', name: 'Robe ou combinaison', detail: 'Printemps/\u00e9t\u00e9 : la robe du jour\u00a0!', layer: 'Tenue', imgCat: 'robes' },
+      { icon: '\u{1F455}', name: 'Top l\u00e9ger', detail: 'Si pas de robe, top du jour', layer: 'Haut', imgCat: 'tops' },
       { icon: '\u{1FA73}', name: 'Shorty ou jupe', detail: 'Pantalon l\u00e9ger, jupe ou shorty chic', layer: 'Bas' },
       { icon: '\u{1FA74}', name: 'Sandales', detail: 'Pieds libres, bonheur\u00a0!', layer: 'Pieds' }
     ],
@@ -786,7 +787,8 @@ const OUTFITS = {
   },
   fournaise: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top le plus l\u00e9ger', detail: 'Le minimum, avec gr\u00e2ce', layer: 'Haut', imgCat: 'tops' },
+      { icon: '\u{1F457}', name: 'Robe ou combinaison l\u00e9g\u00e8re', detail: 'Printemps/\u00e9t\u00e9 : maximum l\u00e9g\u00e8ret\u00e9\u00a0!', layer: 'Tenue', imgCat: 'robes' },
+      { icon: '\u{1F455}', name: 'Top le plus l\u00e9ger', detail: 'Si pas de robe, le minimum avec gr\u00e2ce', layer: 'Haut', imgCat: 'tops' },
       { icon: '\u{1FA73}', name: 'Shorty ou jupe', detail: 'A\u00e9ration maximale', layer: 'Bas' },
       { icon: '\u{1FA74}', name: 'Sandales', detail: 'Pieds libres\u00a0!', layer: 'Pieds' }
     ],
@@ -798,24 +800,26 @@ const OUTFITS = {
 };
 
 // --- CLOTHING PHOTO CATALOGUE ---
+// seasons: null = toute l'année | ['printemps','ete'] = saisonnier
 const CATALOGUE = {
-  pulls: Array.from({length: 27}, (_, i) => 'assets/clothes/pulls/pull_' + String(i+1).padStart(2,'0') + '.png'),
-  tops:  Array.from({length: 37}, (_, i) => 'assets/clothes/tops/top_'  + String(i+1).padStart(2,'0') + '.png')
+  pulls:   { items: Array.from({length: 27}, (_, i) => 'assets/clothes/pulls/pull_' + String(i+1).padStart(2,'0') + '.png'), seasons: null },
+  tops:    { items: Array.from({length: 37}, (_, i) => 'assets/clothes/tops/top_'   + String(i+1).padStart(2,'0') + '.png'), seasons: null },
+  robes:   { items: Array.from({length:  6}, (_, i) => 'assets/clothes/robes/robe_' + String(i+1).padStart(2,'0') + '.png'), seasons: ['printemps','ete'] }
 };
 
-function randomFromCatalogue(category) {
-  const items = CATALOGUE[category];
-  if (!items || items.length === 0) return null;
-  return items[Math.floor(Math.random() * items.length)];
-}
-
-// Use a daily seed so the same outfit shows all day but changes tomorrow
+// Retourne une image du catalogue avec seed quotidien.
+// Retourne null si la catégorie est hors-saison.
 function dailyRandomFromCatalogue(category, salt) {
-  const items = CATALOGUE[category];
-  if (!items || items.length === 0) return null;
+  const cat = CATALOGUE[category];
+  if (!cat || cat.items.length === 0) return null;
+  // Vérif saisonnière
+  if (cat.seasons) {
+    const s = getSeason();
+    if (!cat.seasons.includes(s)) return null;  // hors saison → emoji à la place
+  }
   const today = new Date();
   const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate() + (salt || 0);
-  return items[seed % items.length];
+  return cat.items[seed % cat.items.length];
 }
 
 const RAIN_ITEMS = [
