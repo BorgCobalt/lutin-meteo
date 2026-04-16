@@ -435,15 +435,15 @@ body.theme-winter .lutin-feeling {
   100% { transform: translateY(104vh) translateX(0)   rotate(185deg); opacity: 0; }
 }
 
-/* ===== SPRING : coccinelle baladeur sur les bords des cartes ===== */
+/* ===== SPRING : coccinelle SVG de profil sur les bords des cartes ===== */
 .ladybug-walker {
   position: absolute;
   z-index: 50;
   pointer-events: none;
-  font-size: 1.4rem;
-  line-height: 1;
-  transform-origin: center bottom;
-  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.25));
+  width: 26px;
+  height: 22px;
+  transform-origin: center center;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
 }
 
 /* ===== AUTUMN : champignons pulsants sur les bords des cartes ===== */
@@ -462,6 +462,28 @@ body.theme-winter .lutin-feeling {
   15%  { opacity: 0.85; }
   60%  { transform: scale(1.15); opacity: 1; }
   100% { transform: scale(0.75); opacity: 0.72; }
+}
+
+/* ===== HEARTS : cœurs flottants (coccinelle + champignons) ===== */
+.float-heart {
+  position: absolute;
+  z-index: 55;
+  pointer-events: none;
+  font-size: 0.6rem;
+  line-height: 1;
+  color: #ff6b8a;
+}
+.ladybug-heart { animation: heart-once 2.2s ease-out forwards; }
+.mushroom-heart { animation: heart-loop 2.6s ease-in-out infinite; }
+@keyframes heart-once {
+  0%   { transform: translateY(0)    scale(0.5); opacity: 0.95; }
+  100% { transform: translateY(-24px) scale(0.9); opacity: 0; }
+}
+@keyframes heart-loop {
+  0%   { transform: translateY(0)     scale(0.4); opacity: 0; }
+  18%  { opacity: 0.9; }
+  65%  { transform: translateY(-18px) scale(1.0); opacity: 0.75; }
+  100% { transform: translateY(-28px) scale(0.7); opacity: 0; }
 }
 
 /* Outfit */
@@ -1557,12 +1579,42 @@ function addWinterDecorations(bg) {
   }
 }
 
-/* ===== COCCINELLE BALADEUR (Printemps) ===== */
+/* ===== COCCINELLE SVG DE PROFIL — PÉRIMÈTRE DES CARTES (Printemps) ===== */
 function initLadybugWalker(container) {
+  // SVG coccinelle de profil, facing right (angle 0)
+  const SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 22" width="26" height="22" style="overflow:visible">'
+    // Corps rouge
+    +'<ellipse cx="11" cy="12" rx="10" ry="7" fill="#d42a0a"/>'
+    // Ligne centrale des ailes
+    +'<line x1="11" y1="5" x2="11" y2="19" stroke="#1a0000" stroke-width="0.8" opacity="0.5"/>'
+    // 4 points noirs
+    +'<circle cx="7.5" cy="10"   r="1.6" fill="#1a0000" opacity="0.78"/>'
+    +'<circle cx="14"  cy="10"   r="1.6" fill="#1a0000" opacity="0.78"/>'
+    +'<circle cx="8"   cy="14.5" r="1.2" fill="#1a0000" opacity="0.72"/>'
+    +'<circle cx="14"  cy="14.5" r="1.2" fill="#1a0000" opacity="0.72"/>'
+    // Tête noire
+    +'<circle cx="21" cy="11" r="4.2" fill="#1a0000"/>'
+    // Œil blanc + pupille
+    +'<circle cx="22.5" cy="9"   r="1.5"  fill="white"/>'
+    +'<circle cx="23.1" cy="9.4" r="0.55" fill="#1a0000"/>'
+    // Antennes
+    +'<path d="M21,6.8 Q19.5,3 20,1.5"   stroke="#333" stroke-width="0.9" fill="none" stroke-linecap="round"/>'
+    +'<path d="M21,6.8 Q23,3   23.5,1.5" stroke="#333" stroke-width="0.9" fill="none" stroke-linecap="round"/>'
+    +'<circle cx="20"  cy="1.5" r="1" fill="#333"/>'
+    +'<circle cx="23.5" cy="1.5" r="1" fill="#333"/>'
+    // Pattes
+    +'<line x1="6"  y1="18.5" x2="4.5"  y2="21"   stroke="#1a0000" stroke-width="0.9"/>'
+    +'<line x1="11" y1="19"   x2="10.5" y2="21.5"  stroke="#1a0000" stroke-width="0.9"/>'
+    +'<line x1="16" y1="18.5" x2="15.5" y2="21"    stroke="#1a0000" stroke-width="0.9"/>'
+    +'</svg>';
+
   const el = document.createElement('div');
   el.className = 'ladybug-walker';
-  el.textContent = '\u{1F41E}';
+  el.innerHTML = SVG;
   container.appendChild(el);
+
+  // Centre du SVG (13, 11) — pour centrer sur le bord de la carte
+  const CX = 13, CY = 11;
 
   function getCardPos(card) {
     let x = 0, y = 0, cur = card;
@@ -1570,50 +1622,71 @@ function initLadybugWalker(container) {
     return { x, y, w: card.offsetWidth, h: card.offsetHeight };
   }
 
-  let px = 0, py = 0, tx = 0, ty = 0;
-  let facingRight = true, pauseUntil = 0;
-  const SPEED = 0.55;
-
-  function pickTarget() {
-    const cards = Array.from(container.querySelectorAll('.card'));
-    if (!cards.length) return;
-    const c = getCardPos(cards[Math.floor(Math.random() * cards.length)]);
-    const edge = Math.floor(Math.random() * 4);
-    const t = 0.1 + Math.random() * 0.8;
+  // Retourne {left, top, angle} pour placer la coccinelle au périmètre
+  // edge 0=haut(G→D), 1=droite(H→B), 2=bas(D→G), 3=gauche(B→H)
+  function edgePos(c, edge, t) {
     switch(edge) {
-      case 0: tx = c.x + t * c.w; ty = c.y - 4;       break; // top
-      case 1: tx = c.x + t * c.w; ty = c.y + c.h + 2; break; // bottom
-      case 2: tx = c.x - 4;       ty = c.y + t * c.h;  break; // left
-      case 3: tx = c.x + c.w + 2; ty = c.y + t * c.h;  break; // right
+      case 0: return { left: c.x + t*c.w        - CX, top: c.y           - CY, angle: 0   };
+      case 1: return { left: c.x + c.w          - CX, top: c.y + t*c.h   - CY, angle: 90  };
+      case 2: return { left: c.x + (1-t)*c.w    - CX, top: c.y + c.h     - CY, angle: 180 };
+      case 3: return { left: c.x                - CX, top: c.y + (1-t)*c.h - CY, angle: 270 };
     }
   }
 
-  pickTarget(); px = tx; py = ty;
-  pickTarget();
+  let cardIdx = 0, edge = 0, t = 0;
+  let pauseUntil = 0, lastHeart = 0;
+  const SPEED = 1.3; // px/frame
+
+  function emitHeart(lx, ly) {
+    const h = document.createElement('div');
+    h.className = 'float-heart ladybug-heart';
+    h.textContent = '\u2665';
+    h.style.left = (lx + 6) + 'px';
+    h.style.top  = (ly - 14) + 'px';
+    container.appendChild(h);
+    setTimeout(function(){ h.remove(); }, 2200);
+  }
 
   function frame(ts) {
     if (!document.body.classList.contains('theme-spring')) { el.remove(); return; }
-    el.style.left = px + 'px';
-    el.style.top  = py + 'px';
-    if (ts < pauseUntil) { requestAnimationFrame(frame); return; }
-    const dx = tx - px, dy = ty - py;
-    const d  = Math.sqrt(dx*dx + dy*dy);
-    if (d < SPEED + 0.1) {
-      px = tx; py = ty;
-      pauseUntil = ts + 300 + Math.random() * 2000;
-      pickTarget();
-    } else {
-      px += (dx/d) * SPEED;
-      py += (dy/d) * SPEED;
-      if (Math.abs(dx/d) > 0.2) facingRight = dx > 0;
+    const cards = Array.from(container.querySelectorAll('.card'));
+    if (!cards.length) { requestAnimationFrame(frame); return; }
+    if (cardIdx >= cards.length) cardIdx = 0;
+
+    const c    = getCardPos(cards[cardIdx]);
+    const elen = (edge % 2 === 0) ? c.w : c.h;
+
+    if (ts >= pauseUntil && elen > 0) t += SPEED / elen;
+
+    if (t >= 1) {
+      t = 0;
+      edge = (edge + 1) % 4;
+      // Au retour au bord haut (boucle complète), chance de changer de carte
+      if (edge === 0 && Math.random() < 0.4) {
+        cardIdx = Math.floor(Math.random() * cards.length);
+        pauseUntil = ts + 100 + Math.random() * 500;
+      }
+      // Petite pause aux coins
+      if (Math.random() < 0.18) pauseUntil = ts + 350 + Math.random() * 1400;
     }
-    el.style.transform = 'scaleX(' + (facingRight ? 1 : -1) + ')';
+
+    const p = edgePos(c, edge, t);
+    el.style.left      = p.left + 'px';
+    el.style.top       = p.top  + 'px';
+    el.style.transform = 'rotate(' + p.angle + 'deg)';
+
+    // Émettre un cœur toutes les ~3-5s
+    if (ts - lastHeart > 3000 + Math.random() * 2000) {
+      emitHeart(p.left, p.top);
+      lastHeart = ts;
+    }
+
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
 }
 
-/* ===== CHAMPIGNONS PULSANTS (Automne) ===== */
+/* ===== CHAMPIGNONS PULSANTS + CŒURS (Automne) ===== */
 function addEdgeMushrooms(container) {
   const cards = Array.from(container.querySelectorAll('.card'));
   cards.forEach(function(card, i) {
@@ -1626,11 +1699,26 @@ function addEdgeMushrooms(container) {
       while (cur && cur !== container) { cx += cur.offsetLeft; cy += cur.offsetTop; cur = cur.offsetParent; }
       const onTop = Math.random() < 0.5;
       const margin = 24;
-      d.style.left = (cx + margin + Math.random() * Math.max(0, card.offsetWidth - margin * 2)) + 'px';
-      d.style.top  = onTop ? (cy - 14) + 'px' : (cy + card.offsetHeight - 14) + 'px';
-      d.style.animationDuration = (2.5 + Math.random() * 3) + 's';
-      d.style.animationDelay    = (i * 0.6 + j * 0.35 + Math.random() * 1.5) + 's';
+      const mLeft = cx + margin + Math.random() * Math.max(0, card.offsetWidth - margin * 2);
+      const mTop  = onTop ? cy - 14 : cy + card.offsetHeight - 14;
+      d.style.left = mLeft + 'px';
+      d.style.top  = mTop  + 'px';
+      const dur   = 2.5 + Math.random() * 3;
+      const delay = i * 0.6 + j * 0.35 + Math.random() * 1.5;
+      d.style.animationDuration = dur   + 's';
+      d.style.animationDelay    = delay + 's';
       container.appendChild(d);
+
+      // Cœur flottant au-dessus du champignon
+      const h = document.createElement('div');
+      h.className = 'float-heart mushroom-heart';
+      h.textContent = '\u2665';
+      h.style.color = '#ff8fa3';
+      h.style.left  = (mLeft + 4) + 'px';
+      h.style.top   = (mTop - 20) + 'px';
+      h.style.animationDuration = (1.9 + Math.random() * 1.4) + 's';
+      h.style.animationDelay    = (delay + 0.4) + 's';
+      container.appendChild(h);
     }
   });
 }
