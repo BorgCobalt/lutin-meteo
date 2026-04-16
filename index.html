@@ -570,6 +570,7 @@ body.theme-summer .lutin-feeling {
 
 .alert-rain { background: rgba(90,130,180,0.1); }
 .alert-snow { background: rgba(180,200,220,0.15); }
+.alert-note { background: rgba(180,150,80,0.1); }
 
 /* Bottom fade */
 .app-container::after {
@@ -717,7 +718,7 @@ const LUTIN_FEELINGS = [
 const OUTFITS = {
   glacial_absolu: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut, toujours', layer: 'Base' },
+      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut, toujours', layer: 'Base', imgCat: 'tops' },
       { icon: '\u{1F9F6}', name: 'Pull-over bien doux', detail: 'Le plus chaud et moelleux', layer: 'Milieu', imgCat: 'pulls' },
       { icon: '\u{1F9E5}', name: 'Manteau chaud', detail: 'Le gros manteau d\'hiver', layer: 'Dessus' },
       { icon: '\u{1F456}', name: 'Pantalon en coton \u00e9pais', detail: 'Ou jean moulant avec collants', layer: 'Bas' },
@@ -731,7 +732,7 @@ const OUTFITS = {
   },
   glacial: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
+      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base', imgCat: 'tops' },
       { icon: '\u{1F9F6}', name: 'Pull-over doux', detail: 'Chaud et \u00e9l\u00e9gant', layer: 'Milieu', imgCat: 'pulls' },
       { icon: '\u{1F9E5}', name: 'Manteau', detail: 'Manteau bien chaud', layer: 'Dessus' },
       { icon: '\u{1F456}', name: 'Jean moulant', detail: 'Ou pantalon en coton chaud', layer: 'Bas' },
@@ -744,7 +745,7 @@ const OUTFITS = {
   },
   froid: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
+      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base', imgCat: 'tops' },
       { icon: '\u{1F9F6}', name: 'Pull-over doux', detail: 'Moelleux et chic', layer: 'Milieu', imgCat: 'pulls' },
       { icon: '\u{1F9E5}', name: 'Veste chaude', detail: 'Veste \u00e9l\u00e9gante ou manteau l\u00e9ger', layer: 'Dessus' },
       { icon: '\u{1F456}', name: 'Pantalon en coton', detail: 'Ou jean moulant', layer: 'Bas' },
@@ -756,7 +757,7 @@ const OUTFITS = {
   },
   frais: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
+      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base', imgCat: 'tops' },
       { icon: '\u{1F454}', name: 'Chemise ou pull l\u00e9ger', detail: 'Chemise \u00e9l\u00e9gante ou pull fin', layer: 'Milieu', imgCat: 'pulls' },
       { icon: '\u{1F9E5}', name: 'Veste', detail: 'Veste l\u00e9g\u00e8re pour les couches', layer: 'Dessus' },
       { icon: '\u{1F456}', name: 'Jean moulant ou jupe', detail: 'Avec collants si jupe', layer: 'Bas' },
@@ -766,8 +767,8 @@ const OUTFITS = {
   },
   presque_parfait: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
-      { icon: '\u{1F454}', name: 'Chemise l\u00e9g\u00e8re', detail: 'Ou pull-over fin et doux', layer: 'Haut' },
+      { icon: '\u{1F455}', name: 'Top', detail: 'Haut du corps visible ou sous la veste', layer: 'Base', imgCat: 'tops' },
+      { icon: '\u{1F454}', name: 'Chemise l\u00e9g\u00e8re', detail: 'Ou pull-over fin et doux', layer: 'Haut', imgCat: 'pulls' },
       { icon: '\u{1F456}', name: 'Jean moulant ou jupe', detail: 'Pantalon coton ou jupe \u00e9l\u00e9gante', layer: 'Bas' },
       { icon: '\u{1F45F}', name: 'Chaussures l\u00e9g\u00e8res', detail: 'Ou sandales si beau temps', layer: 'Pieds' }
     ],
@@ -777,18 +778,17 @@ const OUTFITS = {
   },
   perfection: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top l\u00e9ger', detail: 'Sous-v\u00eatement du haut', layer: 'Base' },
-      { icon: '\u{1F457}', name: 'Robe ou chemise l\u00e9g\u00e8re', detail: 'Robe \u00e9l\u00e9gante ou shorty + haut', layer: 'Haut' },
-      { icon: '\u{1FA73}', name: 'Shorty ou jupe', detail: 'Si pas de robe, shorty chic', layer: 'Bas' },
+      { icon: '\u{1F455}', name: 'Top l\u00e9ger', detail: 'Le top du jour, profites-en\u00a0!', layer: 'Haut', imgCat: 'tops' },
+      { icon: '\u{1FA73}', name: 'Shorty ou jupe', detail: 'Pantalon l\u00e9ger, jupe ou shorty chic', layer: 'Bas' },
       { icon: '\u{1FA74}', name: 'Sandales', detail: 'Pieds libres, bonheur\u00a0!', layer: 'Pieds' }
     ],
     accessories: []
   },
   fournaise: {
     layers: [
-      { icon: '\u{1F455}', name: 'Top le plus l\u00e9ger', detail: 'Le minimum, avec gr\u00e2ce', layer: 'Base' },
-      { icon: '\u{1F457}', name: 'Robe l\u00e9g\u00e8re', detail: 'Ou shorty + top a\u00e9r\u00e9', layer: 'Haut' },
-      { icon: '\u{1FA74}', name: 'Sandales', detail: 'A\u00e9ration maximale', layer: 'Pieds' }
+      { icon: '\u{1F455}', name: 'Top le plus l\u00e9ger', detail: 'Le minimum, avec gr\u00e2ce', layer: 'Haut', imgCat: 'tops' },
+      { icon: '\u{1FA73}', name: 'Shorty ou jupe', detail: 'A\u00e9ration maximale', layer: 'Bas' },
+      { icon: '\u{1FA74}', name: 'Sandales', detail: 'Pieds libres\u00a0!', layer: 'Pieds' }
     ],
     accessories: [
       { icon: '\u{1F576}\uFE0F', name: 'Lunettes de soleil' },
@@ -799,7 +799,8 @@ const OUTFITS = {
 
 // --- CLOTHING PHOTO CATALOGUE ---
 const CATALOGUE = {
-  pulls: Array.from({length: 27}, (_, i) => 'assets/clothes/pulls/pull_' + String(i+1).padStart(2,'0') + '.png')
+  pulls: Array.from({length: 27}, (_, i) => 'assets/clothes/pulls/pull_' + String(i+1).padStart(2,'0') + '.png'),
+  tops:  Array.from({length: 37}, (_, i) => 'assets/clothes/tops/top_'  + String(i+1).padStart(2,'0') + '.png')
 };
 
 function randomFromCatalogue(category) {
@@ -860,6 +861,16 @@ function weatherCodeToInfo(code) {
 
 function isRainy(code) { return [51,53,55,61,63,65,66,67,80,81,82,95,96,99].includes(code); }
 function isSnowy(code) { return [71,73,75,77,85,86].includes(code); }
+function isSunny(code) { return [0,1].includes(code); }
+
+// --- SAISON ---
+function getSeason() {
+  const m = new Date().getMonth() + 1; // 1-12
+  if (m >= 3 && m <= 5)  return 'printemps';
+  if (m >= 6 && m <= 8)  return 'ete';
+  if (m >= 9 && m <= 11) return 'automne';
+  return 'hiver';
+}
 
 // --- ENGINE ---
 function getLutinFeeling(temp) {
@@ -877,18 +888,36 @@ function getOutfitKey(temp) {
   return 'fournaise';
 }
 
-function buildRecommendation(temp, weatherCode, windSpeed) {
+function buildRecommendation(temp, weatherCode, windSpeed, humidity) {
   const key = getOutfitKey(temp);
   const outfit = OUTFITS[key];
   const feeling = getLutinFeeling(temp);
   const rain = isRainy(weatherCode);
   const snow = isSnowy(weatherCode);
+  const sunny = isSunny(weatherCode);
   const windy = windSpeed > 30;
+  const humid = (humidity || 0) > 75;
+  const season = getSeason();
   const accessories = [...outfit.accessories];
+
   if (rain) accessories.push(...RAIN_ITEMS);
   if (windy) accessories.push(...WIND_ITEMS);
   if (snow) accessories.push({ icon: '\u{1F97E}', name: 'Bottes imperm\u00e9ables' });
-  return { feeling, layers: outfit.layers, accessories, rain, snow, windy };
+
+  // Lunettes si soleil et temp >= 15
+  if (sunny && temp >= 15 && !accessories.find(a => a.name.includes('Lunettes'))) {
+    accessories.push({ icon: '\u{1F576}\uFE0F', name: 'Lunettes de soleil' });
+  }
+
+  // Notes contextuelles
+  const notes = [];
+  if (humid && temp >= 20) notes.push('\u{1F4A6} Forte humidit\u00e9\u00a0: privil\u00e9gie les mati\u00e8res respirantes (lin, coton l\u00e2che).');
+  if (humid && temp < 15)  notes.push('\u{1F4A6} Air humide et froid\u00a0: \u00e9vite la laine qui se mouille, opte pour une couche synth\u00e9tique.');
+  if (windy && temp < 15)  notes.push('\u{1F32C}\uFE0F Vent fort\u00a0: remonte l\u2019\u00e9charpe sur le cou, le ressenti est encore plus froid\u00a0!');
+  if (season === 'printemps' && temp >= 15) notes.push('\u{1F33C} Printemps\u00a0: les matin\u00e9es restent fra\u00eeches, pense \u00e0 une petite veste dans le sac.');
+  if (season === 'automne'   && temp >= 15) notes.push('\u{1F342} Automne\u00a0: les temp\u00e9ratures peuvent chuter en soir\u00e9e, pr\u00e9vois une couche suppl\u00e9mentaire.');
+
+  return { feeling, layers: outfit.layers, accessories, rain, snow, windy, humid, sunny, season, notes };
 }
 
 // --- GEOLOCATION ---
@@ -1065,6 +1094,11 @@ function renderOutfit(rec, label, daySalt) {
   }
   if (rec.rain) h += '<div class="weather-alert alert-rain">\u{1F327}\uFE0F <strong>Pluie pr\u00e9vue\u00a0!</strong> Le Lutin doit penser au parapluie.</div>';
   if (rec.snow) h += '<div class="weather-alert alert-snow">\u{1F328}\uFE0F <strong>Neige\u00a0!</strong> Bottes imperm\u00e9ables et prudence.</div>';
+  if (rec.notes && rec.notes.length > 0) {
+    for (const note of rec.notes) {
+      h += '<div class="weather-alert alert-note">' + note + '</div>';
+    }
+  }
   h += '</div></div>';
   return h;
 }
@@ -1093,7 +1127,7 @@ function renderTomorrow(data) {
   const wind = Math.round(d.wind_speed_10m_max[1]);
   const wI = weatherCodeToInfo(code);
   const avg = Math.round((max + min) / 2);
-  const rec = buildRecommendation(avg, code, wind);
+  const rec = buildRecommendation(avg, code, wind, null);
   const f = getLutinFeeling(avg);
   let h = `
     <div class="card">
@@ -1310,7 +1344,8 @@ async function init() {
     const temp = Math.round(weather.current.temperature_2m);
     const code = weather.current.weather_code;
     const wind = Math.round(weather.current.wind_speed_10m);
-    const rec = buildRecommendation(temp, code, wind);
+    const humidity = weather.current.relative_humidity_2m;
+    const rec = buildRecommendation(temp, code, wind, humidity);
 
     // Apply theme based on temperature
     applyTheme(temp);
