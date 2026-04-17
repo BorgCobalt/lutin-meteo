@@ -1086,15 +1086,41 @@ function buildRecommendation(temp, weatherCode, windSpeed, humidity) {
     accessories.push({ icon: '\u{1F576}\uFE0F', name: 'Lunettes de soleil' });
   }
 
+  // --- Adaptation dynamique des couches ---
+  // Clone les layers pour ne pas muter OUTFITS
+  let layers = outfit.layers.map(l => Object.assign({}, l));
+
+  // Chaud + humide : remplace les pulls par des hauts respirants
+  const warmAndHumid = humid && temp >= 20;
+  if (warmAndHumid) {
+    layers = layers.map(l => {
+      if (l.imgCat === 'pulls') {
+        // En printemps/été propose crop-tops et tops, sinon juste tops
+        const warmCat = (season === 'printemps' || season === 'ete')
+          ? ['tops', 'crop_tops'] : 'tops';
+        return Object.assign({}, l, {
+          name:   'Haut l\u00e9ger ou crop-top',
+          detail: 'Lin, coton l\u00e2che \u2014 mat\u00e8re respirante avant tout',
+          icon:   '\u{1F455}',
+          imgCat: warmCat
+        });
+      }
+      return l;
+    });
+    // Supprime la veste/dessus si temp >= 23 et humide (inutile et étouffant)
+    if (temp >= 23) layers = layers.filter(l => l.layer !== 'Dessus');
+  }
+
   // Notes contextuelles
   const notes = [];
-  if (humid && temp >= 20) notes.push('\u{1F4A6} Forte humidit\u00e9\u00a0: privil\u00e9gie les mati\u00e8res respirantes (lin, coton l\u00e2che).');
-  if (humid && temp < 15)  notes.push('\u{1F4A6} Air humide et froid\u00a0: \u00e9vite la laine qui se mouille, opte pour une couche synth\u00e9tique.');
-  if (windy && temp < 15)  notes.push('\u{1F32C}\uFE0F Vent fort\u00a0: remonte l\u2019\u00e9charpe sur le cou, le ressenti est encore plus froid\u00a0!');
-  if (season === 'printemps' && temp >= 15) notes.push('\u{1F33C} Printemps\u00a0: les matin\u00e9es restent fra\u00eeches, pense \u00e0 une petite veste dans le sac.');
+  if (warmAndHumid)          notes.push('\u{1F4A6} Chaud et humide\u00a0: pulls remplac\u00e9s par des hauts respirants, \u00e9vite les synth\u00e9tiques.');
+  else if (humid && temp >= 15) notes.push('\u{1F4A6} Humidit\u00e9 \u00e9lev\u00e9e\u00a0: privil\u00e9gie les mati\u00e8res respirantes (lin, coton l\u00e2che).');
+  if (humid && temp < 15)    notes.push('\u{1F4A6} Air humide et froid\u00a0: \u00e9vite la laine mouill\u00e9e, opte pour une couche synth\u00e9tique.');
+  if (windy && temp < 15)    notes.push('\u{1F32C}\uFE0F Vent fort\u00a0: remonte l\u2019\u00e9charpe sur le cou, le ressenti est encore plus froid\u00a0!');
+  if (season === 'printemps' && temp >= 15 && !warmAndHumid) notes.push('\u{1F33C} Printemps\u00a0: les matin\u00e9es restent fra\u00eeches, pense \u00e0 une petite veste dans le sac.');
   if (season === 'automne'   && temp >= 15) notes.push('\u{1F342} Automne\u00a0: les temp\u00e9ratures peuvent chuter en soir\u00e9e, pr\u00e9vois une couche suppl\u00e9mentaire.');
 
-  return { feeling, layers: outfit.layers, accessories, rain, snow, windy, humid, sunny, season, notes };
+  return { feeling, layers, accessories, rain, snow, windy, humid, sunny, season, notes };
 }
 
 // --- GEOLOCATION ---
